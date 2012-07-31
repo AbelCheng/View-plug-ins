@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{63948846-7d84-499f-9168-3c99fcb0a0a4}</ProjectGuid>
+    <ArchitectureToolsVersion>1.0.0.0</ArchitectureToolsVersion>
+    <Name>OracleModel</Name>
+    <RootNamespace>OracleModel</RootNamespace>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\ArchitectureTools\Microsoft.VisualStudio.TeamArchitect.ModelingProject.targets" />
+  <ItemGroup>
+    <Folder Include="1-Tables\" />
+    <Folder Include="2-Views\" />
+    <Folder Include="3-Sequences\" />
+    <Folder Include="4-Packages\" />
+    <Folder Include="5-Triggers\" />
+    <Folder Include="ModelDefinition\" />
+    <Content Include="1-Tables\01-EXTRACT_INTERFACE.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="1-Tables\02-EXTRACT_PLUGIN.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="1-Tables\03-EXTRACT_RULE.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="1-Tables\04-EXTRACT_BATCH.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="1-Tables\05-EXTRACT_BATCH_FLEX_VAR.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="1-Tables\06-EXTRACT_BATCH_LOG.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="1-Tables\07-EXTRACT_BATCH_PROGRESS.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="2-Views\01-VIEW_EXTRACT_BATCH_LOG.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="2-Views\02-VIEW_LAST_BATCH_LOG.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="3-Sequences\01-SEQ_RULE_ID.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="3-Sequences\02-SEQ_BATCH_ID.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="4-Packages\01-EXTRACT_UTILITY.pck">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="4-Packages\02-VIEW_EXTRACT_GEN_CODE.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="5-Triggers\01-TRG_EXTRACT_RULE.trg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModelDefinition\OracleModel.uml">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+</Project>

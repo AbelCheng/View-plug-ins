@@ -23,18 +23,16 @@
 <p><strong>Meta Tables</strong></p>
 <p>There are only 3 tables about meta data need to be maintained for above designed model:</p>
 <ol>
-<li>EXTRACT_INTERFACE</li>
-<li>EXTRACT_PLUGIN</li>
-<li>EXTRACT_RULE</li>
+<li>EXTRACT_INTERFACE </li>
+<li>EXTRACT_PLUGIN </li>
+<li>EXTRACT_RULE </li>
 </ol>
 <p>(All the rest tables in the deployment package are some control tables for internal use.)</p>
-<p>
-1. EXTRACT_INTERFACE
-</p>
+<p>1. EXTRACT_INTERFACE</p>
 <div>Sample:</div>
-<table style="border: 1px solid #C0C0C0;" cellspacing="0" cellpadding="2" border="1">
+<table style="border: 1px solid #C0C0C0;" border="1" cellspacing="0" cellpadding="2">
 <tbody>
-<tr align="center" bgcolor="Gainsboro" style="font-weight: bold">
+<tr style="font-weight: bold;" align="center" bgcolor="gainsboro">
 <td>INTERFACE_ID</td>
 <td>UNION_VIEW</td>
 <td>SELECT_LIST</td>
@@ -60,119 +58,533 @@
 </tr>
 </tbody>
 </table>
-<div>
-<u>Columns</u><br />
-- INTERFACE_ID: The unique identifier for the interface, consider a naming convention within the enterprise.<br />
-- UNION_VIEW: The name of view which will union all plug-ins under the same interface.<br />
-- SELECT_LIST: The select list in the select statement, every plug-in view of the same interface will follow this signature.<br />
-- DESCRIPTION_:<br />
-&nbsp;
-</div>
-<p>
-2. EXTRACT_PLUGIN
-</p>
+<div><span style="text-decoration: underline;">Columns</span><br />- INTERFACE_ID: The unique identifier for the interface, consider a naming convention within the enterprise.<br />- UNION_VIEW: The name of view which will union all plug-ins under the same interface.<br />- SELECT_LIST: The select list in the select statement, every plug-in view of the same interface will follow this signature.<br />- DESCRIPTION_:<br />&nbsp;</div>
+<p>2. EXTRACT_PLUGIN</p>
 <div>Sample:</div>
-<table style="border: 1px solid #C0C0C0;" cellspacing="0" cellpadding="2" border="1">
+<table style="border: 1px solid #C0C0C0;" border="1" cellspacing="0" cellpadding="2">
 <tbody>
-<tr align="center" bgcolor="Gainsboro" style="font-weight: bold">
-<td>PLUGIN_ID</td><td>INTERFACE_ID</td><td>PLUGIN_VIEW</td><td>PLUGIN_ORDER</td><td>DESCRIPTION_</td></tr>
-<tr>
-<td>PROD_CLASS_SERE</td><td>PROD_CLASS</td><td>XYZ.VIEW_PROD_CLASS_SERE</td><td>1</td><td>Identify holding products from Seremain (start on holding level).</td>
-</tr><tr>
-<td>PROD_CLASS_SECM</td><td>PROD_CLASS</td><td>XYZ.VIEW_PROD_CLASS_SECM</td><td>2</td><td>Identify holding products from SecM (start on holding level).</td>
-</tr><tr>
-<td>PROD_CLASS_DEAL</td><td>PROD_CLASS</td><td>XYZ.VIEW_PROD_CLASS_DEAL</td><td>3</td><td>Identify holding products from SecM (start on deal level).</td>
-</tr><tr>
-<td>PROD_CLASS_BSK</td><td>PROD_CLASS</td><td>XYZ.VIEW_PROD_CLASS_BSK</td><td>4</td><td>Identify holding products from Basket User Table</td>
-</tr><tr>
-<td>UND_SEC_1L</td><td>LEAF_SEC</td><td>XYZ.VIEW_UND_SEC_1L</td><td>1</td><td>Single level products - UND_SEC_ID = SEC_ID</td>
-</tr><tr>
-<td>UND_SEC_2L</td><td>LEAF_SEC</td><td>XYZ.VIEW_UND_SEC_2L</td><td>2</td><td>Two levels products, find the underliers from SecM</td>
-</tr><tr>
-<td>UND_SEC_2L3</td><td>LEAF_SEC</td><td>XYZ.VIEW_UND_SEC_2L3</td><td>3</td><td>Two or three levels products, find the 
-		underliers, until the bottom level is EQUITY.</td>
-</tr><tr>
-<td>UND_SEC_DLU</td><td>LEAF_SEC</td><td>XYZ.VIEW_UND_SEC_DLU</td><td>4</td><td>Special model DEAL-LEG-UNDERLIER which start from Deal level, end with Underlier level.</td>
-</tr><tr>
-<td>UND_SEC_IND</td><td>LEAF_SEC</td><td>XYZ.VIEW_UND_SEC_IND</td><td>5</td><td>Find all constituents for index products</td>
-</tr><tr>
-<td>UND_SEC_BSK</td><td>LEAF_SEC</td><td>XYZ.VIEW_UND_SEC_BSK</td><td>6</td><td>Find all constituents for basket products</td>
+<tr style="font-weight: bold;" align="center" bgcolor="gainsboro">
+<td>PLUGIN_ID</td>
+<td>INTERFACE_ID</td>
+<td>PLUGIN_VIEW</td>
+<td>PLUGIN_ORDER</td>
+<td>DESCRIPTION_</td>
 </tr>
-	<tr>
-<td>...</td><td>...</td><td>...</td><td>...</td><td>...</td>
+<tr>
+<td>PROD_CLASS_SERE</td>
+<td>PROD_CLASS</td>
+<td>XYZ.VIEW_PROD_CLASS_SERE</td>
+<td>1</td>
+<td>Identify holding products from Seremain (start on holding level).</td>
+</tr>
+<tr>
+<td>PROD_CLASS_SECM</td>
+<td>PROD_CLASS</td>
+<td>XYZ.VIEW_PROD_CLASS_SECM</td>
+<td>2</td>
+<td>Identify holding products from SecM (start on holding level).</td>
+</tr>
+<tr>
+<td>PROD_CLASS_DEAL</td>
+<td>PROD_CLASS</td>
+<td>XYZ.VIEW_PROD_CLASS_DEAL</td>
+<td>3</td>
+<td>Identify holding products from SecM (start on deal level).</td>
+</tr>
+<tr>
+<td>PROD_CLASS_BSK</td>
+<td>PROD_CLASS</td>
+<td>XYZ.VIEW_PROD_CLASS_BSK</td>
+<td>4</td>
+<td>Identify holding products from Basket User Table</td>
+</tr>
+<tr>
+<td>UND_SEC_1L</td>
+<td>LEAF_SEC</td>
+<td>XYZ.VIEW_UND_SEC_1L</td>
+<td>1</td>
+<td>Single level products - UND_SEC_ID = SEC_ID</td>
+</tr>
+<tr>
+<td>UND_SEC_2L</td>
+<td>LEAF_SEC</td>
+<td>XYZ.VIEW_UND_SEC_2L</td>
+<td>2</td>
+<td>Two levels products, find the underliers from SecM</td>
+</tr>
+<tr>
+<td>UND_SEC_2L3</td>
+<td>LEAF_SEC</td>
+<td>XYZ.VIEW_UND_SEC_2L3</td>
+<td>3</td>
+<td>Two or three levels products, find the underliers, until the bottom level is EQUITY.</td>
+</tr>
+<tr>
+<td>UND_SEC_DLU</td>
+<td>LEAF_SEC</td>
+<td>XYZ.VIEW_UND_SEC_DLU</td>
+<td>4</td>
+<td>Special model DEAL-LEG-UNDERLIER which start from Deal level, end with Underlier level.</td>
+</tr>
+<tr>
+<td>UND_SEC_IND</td>
+<td>LEAF_SEC</td>
+<td>XYZ.VIEW_UND_SEC_IND</td>
+<td>5</td>
+<td>Find all constituents for index products</td>
+</tr>
+<tr>
+<td>UND_SEC_BSK</td>
+<td>LEAF_SEC</td>
+<td>XYZ.VIEW_UND_SEC_BSK</td>
+<td>6</td>
+<td>Find all constituents for basket products</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
 </tr>
 </tbody>
 </table>
-<div>
-<u>Columns</u><br />
-- PLUGIN_ID: The unique identifier for the plug-in, consider a naming convention within the enterprise.<br />
-- INTERFACE_ID: The interface of the plug-in belongs to.<br />
-- PLUGIN_VIEW: The view which will implement the plug-in.<br />
-- PLUGIN_ORDER: The order where the plug-in will be assembled in the interface union view.<br />
-- DESCRIPTION_:<br />
-&nbsp;
-</div>
-<p>
-3. EXTRACT_RULE
-</p>
+<div><span style="text-decoration: underline;">Columns</span><br />- PLUGIN_ID: The unique identifier for the plug-in, consider a naming convention within the enterprise.<br />- INTERFACE_ID: The interface of the plug-in belongs to.<br />- PLUGIN_VIEW: The view which will implement the plug-in.<br />- PLUGIN_ORDER: The order where the plug-in will be assembled in the interface union view.<br />- DESCRIPTION_:<br />&nbsp;</div>
+<p>3. EXTRACT_RULE</p>
 <div>Sample:</div>
-<table style="border: 1px solid #C0C0C0;" cellspacing="0" cellpadding="2" border="1">
+<table style="border: 1px solid #C0C0C0;" border="1" cellspacing="0" cellpadding="2">
 <tbody>
-<tr align="center" bgcolor="Gainsboro" style="font-weight: bold"><td>
-RULE_ID</td><td>PLUGIN_ID</td><td>TAG$01</td><td>TAG$02</td><td>TAG$03</td><td>TAG$04</td><td>...</td></tr><tr><td>
-1</td><td>PROD_CLASS_BSK</td><td>EQUITY BASKET SWAP</td><td>SEC</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-2</td><td>PROD_CLASS_SECM</td><td>CONVERTIBLE/EXCHANGEABLE BOND</td><td>SEC</td><td>DEBT</td><td>CONVERTIBLE</td><td>&nbsp;</td></tr><tr><td>
-3</td><td>PROD_CLASS_SECM</td><td>LISTED EQUITY INDEX OPTION</td><td>SEC</td><td>LISTED_OPTION</td><td>INDEX</td><td>&nbsp;</td></tr><tr><td>
-4</td><td>PROD_CLASS_SECM</td><td>LISTED EQUITY OPTION</td><td>SEC</td><td>LISTED_OPTION</td><td>EQUITY</td><td>&nbsp;</td></tr><tr><td>
-5</td><td>PROD_CLASS_SECM</td><td>OTC EQUITY INDEX OPTION</td><td>SEC</td><td>OTC_OPTION</td><td>INDEX</td><td>&nbsp;</td></tr><tr><td>
-6</td><td>PROD_CLASS_SECM</td><td>OTC EQUITY OPTION</td><td>SEC</td><td>OTC_OPTION</td><td>EQUITY</td><td>&nbsp;</td></tr><tr><td>
-7</td><td>PROD_CLASS_SECM</td><td>RIGHT</td><td>SEC</td><td>EQUITY</td><td>RIGHT</td><td>&nbsp;</td></tr><tr><td>
-8</td><td>PROD_CLASS_SECM</td><td>SINGLE NAME FUTURE</td><td>SEC</td><td>FUTURE</td><td>DEBT</td><td>&nbsp;</td></tr><tr><td>
-9</td><td>PROD_CLASS_SECM</td><td>SYNTHETIC EQUITY SWAP</td><td>SEC</td><td>SES_LEG</td><td>EQUITY_LEG</td><td>&nbsp;</td></tr><tr><td>
-10</td><td>PROD_CLASS_SECM</td><td>TOTAL RETURN SWAP</td><td>SEC</td><td>SWAP</td><td>TOTAL_RETURN</td><td>&nbsp;</td></tr><tr><td>
-11</td><td>PROD_CLASS_SECM</td><td>WARRANT</td><td>SEC</td><td>EQUITY</td><td>WARRANT</td><td>&nbsp;</td></tr><tr><td>
-12</td><td>PROD_CLASS_DEAL</td><td>EQUITY INDEX SWAP</td><td>SEC</td><td>SWAP</td><td>INDEX</td><td>&nbsp;</td></tr><tr><td>
-13</td><td>PROD_CLASS_DEAL</td><td>INDEX FORWARD</td><td>SEC</td><td>FORWARD</td><td>INDEX</td><td>&nbsp;</td></tr><tr><td>
-14</td><td>PROD_CLASS_DEAL</td><td>INDEX FUTURE</td><td>SEC</td><td>FUTURE</td><td>INDEX</td><td>&nbsp;</td></tr><tr><td>
-15</td><td>PROD_CLASS_SERE</td><td>ADR</td><td>SEC</td><td>E</td><td>ADR</td><td>&nbsp;</td></tr><tr><td>
-16</td><td>PROD_CLASS_SERE</td><td>COMMON EQUITY</td><td>SEC</td><td>E</td><td>COM</td><td>&nbsp;</td></tr><tr><td>
-17</td><td>PROD_CLASS_SERE</td><td>CONVERTIBLE PREFERRED SHARE</td><td>SEC</td><td>E</td><td>CON</td><td>&nbsp;</td></tr><tr><td>
-18</td><td>PROD_CLASS_SERE</td><td>EXCHANGE TRADED FUND</td><td>SEC</td><td>E</td><td>ETF</td><td>&nbsp;</td></tr><tr><td>
-19</td><td>PROD_CLASS_SERE</td><td>GDR</td><td>SEC</td><td>E</td><td>GDR</td><td>&nbsp;</td></tr><tr><td>
-20</td><td>PROD_CLASS_SERE</td><td>PREFERRED SHARE</td><td>SEC</td><td>E</td><td>PRF</td><td>&nbsp;</td></tr><tr><td>
-21</td><td>PROD_CLASS_SERE</td><td>UNIT</td><td>SEC</td><td>E</td><td>UNT</td><td>&nbsp;</td></tr><tr><td>
-22</td><td>UND_SEC_1L</td><td>ADR</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-23</td><td>UND_SEC_1L</td><td>COMMON EQUITY</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-24</td><td>UND_SEC_1L</td><td>CONVERTIBLE PREFERRED SHARE</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-25</td><td>UND_SEC_1L</td><td>EXCHANGE TRADED FUND</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-26</td><td>UND_SEC_1L</td><td>GDR</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-27</td><td>UND_SEC_1L</td><td>PREFERRED SHARE</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-28</td><td>UND_SEC_1L</td><td>UNIT</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-29</td><td>UND_SEC_2L</td><td>CONVERTIBLE/EXCHANGEABLE BOND</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-30</td><td>UND_SEC_2L</td><td>LISTED EQUITY OPTION</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-31</td><td>UND_SEC_2L</td><td>OTC EQUITY OPTION</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-32</td><td>UND_SEC_2L</td><td>RIGHT</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-33</td><td>UND_SEC_2L</td><td>WARRANT</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-34</td><td>UND_SEC_2L3</td><td>SYNTHETIC EQUITY SWAP</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-35</td><td>UND_SEC_BSK</td><td>EQUITY BASKET SWAP</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-36</td><td>UND_SEC_IND</td><td>EQUITY INDEX SWAP</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-37</td><td>UND_SEC_IND</td><td>INDEX FUTURE</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-38</td><td>UND_SEC_IND</td><td>LISTED EQUITY INDEX OPTION</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>
-39</td><td>UND_SEC_IND</td><td>OTC EQUITY INDEX OPTION</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>
-<div>
-<u>Columns</u><br />
-- RULE_ID: The primary key of this table is pointless, it just means one unique rule. The business key should be in one or some of TAG$... columns. The integrity of rules configuration must be checked manually.<br />
-- PLUGIN_ID: This rule will be applied to which plug-in.<br />
-- TAG$01: A constant parameter to be used by the extraction plug-in view.<br />
-- TAG$02: ..<br />
-- TAG$03: ..<br />
-- TAG$04: ..<br />
-- TAG$05: ..<br />
-- TAG$06: ..<br />
-- TAG$07: ..<br />
-- TAG$08: ..<br />
-- TAG$09: ..<br />
-&nbsp;
+<tr style="font-weight: bold;" align="center" bgcolor="gainsboro">
+<td>RULE_ID</td>
+<td>PLUGIN_ID</td>
+<td>TAG$01</td>
+<td>TAG$02</td>
+<td>TAG$03</td>
+<td>TAG$04</td>
+<td>...</td>
+</tr>
+<tr>
+<td>1</td>
+<td>PROD_CLASS_BSK</td>
+<td>EQUITY BASKET SWAP</td>
+<td>SEC</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>2</td>
+<td>PROD_CLASS_SECM</td>
+<td>CONVERTIBLE BOND</td>
+<td>SEC</td>
+<td>DEBT</td>
+<td>CONVERTIBLE</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PROD_CLASS_SECM</td>
+<td>LISTED EQUITY INDEX OPTION</td>
+<td>SEC</td>
+<td>LISTED_OPTION</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>4</td>
+<td>PROD_CLASS_SECM</td>
+<td>LISTED EQUITY OPTION</td>
+<td>SEC</td>
+<td>LISTED_OPTION</td>
+<td>EQUITY</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>5</td>
+<td>PROD_CLASS_SECM</td>
+<td>OTC EQUITY INDEX OPTION</td>
+<td>SEC</td>
+<td>OTC_OPTION</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>6</td>
+<td>PROD_CLASS_SECM</td>
+<td>OTC EQUITY OPTION</td>
+<td>SEC</td>
+<td>OTC_OPTION</td>
+<td>EQUITY</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>7</td>
+<td>PROD_CLASS_SECM</td>
+<td>RIGHT</td>
+<td>SEC</td>
+<td>EQUITY</td>
+<td>RIGHT</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>8</td>
+<td>PROD_CLASS_SECM</td>
+<td>SINGLE NAME FUTURE</td>
+<td>SEC</td>
+<td>FUTURE</td>
+<td>DEBT</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>9</td>
+<td>PROD_CLASS_SECM</td>
+<td>SYNTHETIC EQUITY SWAP</td>
+<td>SEC</td>
+<td>SES_LEG</td>
+<td>EQUITY_LEG</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>10</td>
+<td>PROD_CLASS_SECM</td>
+<td>TOTAL RETURN SWAP</td>
+<td>SEC</td>
+<td>SWAP</td>
+<td>TOTAL_RETURN</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>11</td>
+<td>PROD_CLASS_SECM</td>
+<td>WARRANT</td>
+<td>SEC</td>
+<td>EQUITY</td>
+<td>WARRANT</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>12</td>
+<td>PROD_CLASS_DEAL</td>
+<td>EQUITY INDEX SWAP</td>
+<td>SEC</td>
+<td>SWAP</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>13</td>
+<td>PROD_CLASS_DEAL</td>
+<td>INDEX FORWARD</td>
+<td>SEC</td>
+<td>FORWARD</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>14</td>
+<td>PROD_CLASS_DEAL</td>
+<td>INDEX FUTURE</td>
+<td>SEC</td>
+<td>FUTURE</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>15</td>
+<td>PROD_CLASS_SERE</td>
+<td>ADR</td>
+<td>SEC</td>
+<td>E</td>
+<td>ADR</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>16</td>
+<td>PROD_CLASS_SERE</td>
+<td>COMMON EQUITY</td>
+<td>SEC</td>
+<td>E</td>
+<td>COM</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>17</td>
+<td>PROD_CLASS_SERE</td>
+<td>PREFERRED SHARE</td>
+<td>SEC</td>
+<td>E</td>
+<td>CON</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>18</td>
+<td>PROD_CLASS_SERE</td>
+<td>EXCHANGE TRADED FUND</td>
+<td>SEC</td>
+<td>E</td>
+<td>ETF</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>19</td>
+<td>PROD_CLASS_SERE</td>
+<td>GDR</td>
+<td>SEC</td>
+<td>E</td>
+<td>GDR</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>20</td>
+<td>PROD_CLASS_SERE</td>
+<td>PREFERRED SHARE</td>
+<td>SEC</td>
+<td>E</td>
+<td>PRF</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>21</td>
+<td>PROD_CLASS_SERE</td>
+<td>UNIT</td>
+<td>SEC</td>
+<td>E</td>
+<td>UNT</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>22</td>
+<td>UND_SEC_1L</td>
+<td>ADR</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>23</td>
+<td>UND_SEC_1L</td>
+<td>COMMON EQUITY</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>24</td>
+<td>UND_SEC_1L</td>
+<td>PREFERRED SHARE</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>25</td>
+<td>UND_SEC_1L</td>
+<td>EXCHANGE TRADED FUND</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>26</td>
+<td>UND_SEC_1L</td>
+<td>GDR</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>27</td>
+<td>UND_SEC_1L</td>
+<td>PREFERRED SHARE</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>28</td>
+<td>UND_SEC_1L</td>
+<td>UNIT</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>29</td>
+<td>UND_SEC_2L</td>
+<td>CONVERTIBLE BOND</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>30</td>
+<td>UND_SEC_2L</td>
+<td>LISTED EQUITY OPTION</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>31</td>
+<td>UND_SEC_2L</td>
+<td>OTC EQUITY OPTION</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>32</td>
+<td>UND_SEC_2L</td>
+<td>RIGHT</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>33</td>
+<td>UND_SEC_2L</td>
+<td>WARRANT</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>34</td>
+<td>UND_SEC_2L3</td>
+<td>SYNTHETIC EQUITY SWAP</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>35</td>
+<td>UND_SEC_BSK</td>
+<td>EQUITY BASKET SWAP</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>36</td>
+<td>UND_SEC_IND</td>
+<td>EQUITY INDEX SWAP</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>37</td>
+<td>UND_SEC_IND</td>
+<td>INDEX FUTURE</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>38</td>
+<td>UND_SEC_IND</td>
+<td>LISTED EQUITY INDEX OPTION</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>39</td>
+<td>UND_SEC_IND</td>
+<td>OTC EQUITY INDEX OPTION</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<div><span style="text-decoration: underline;">Columns</span><br />- RULE_ID: The primary key of this table is pointless, it just means one unique rule. The business key should be in one or some of TAG$... columns. The integrity of rules configuration must be checked manually.<br />- PLUGIN_ID: This rule will be applied to which plug-in.<br />- TAG$01: A constant parameter to be used by the extraction plug-in view.<br />- TAG$02: ..<br />- TAG$03: ..<br />- TAG$04: ..<br />- TAG$05: ..<br />- TAG$06: ..<br />- TAG$07: ..<br />- TAG$08: ..<br />- TAG$09: ..<br />&nbsp;</div>
+<p>Above example is extracting and classifying hundreds of different product type from various source systems.</p>
+<ul>
+<li>The table EXTRACT_RULE induces them into a few extraction models, and centralizes all constant parameters (tags) to minimize hard-code queries. </li>
+<li>Each extraction model expresss as a plug-in view. The table EXTRACT_PLUGIN describes which view presents the realization of each plug-in and which interface need to follow. </li>
+<li>The table EXTRACT_INTERFACE declares the view signature of each interface (like delegate in C#), and the union view which assembles all its plug-in views. The code of union views can be generated by following helper view: </li>
+</ul>
+<p style="padding-left: 30px;">SELECT * FROM VPI.VIEW_EXTRACT_GEN_CODE<br /><img src="http://download-codeplex.sec.s-msft.com/Download?ProjectName=view&amp;DownloadId=464809" alt="view_extract_gen_code" width="354" height="42" /><br />Click the &lt;CLOB&gt;..., the generated code will be show in a pop-up window of PL/SQL.</p>
+<p><strong>Session Context</strong></p>
+<p>In order to pass some parameters to a batch processing of views (like a OOP class with a parameterless constructor only), the session context is introduced in each batch of extraction processing. The package VPI.EXTRACT_UTILITY provides some functions/procedures to operate the session context.</p>
+<ol>
+<li>CREATE_BATCH: The constructor of batch session, this function return a new BATCH_ID. </li>
+<li>SET_RUNTIME_PARAMS: Set properties in a batch session for passing variables cross views. These variables are stored in table EXTRACT_BATCH. </li>
+</ol>
+<p>For most batch processings, people would like to trace the progress updates during the processing, such as elapsed time, current status, % in progress bar, etc.</p>
+<ol>
+<li>PROGRESS_START: This procedure initializes how many steps will the batch process. </li>
+<li>PROGRESS_UPDATE: This procedure updates current status. </li>
+</ol>
+<div>For example (Oracle version):</div>
+<div style="color: black; background-color: white;">
+<pre><span style="color: blue;">PROCEDURE</span> ETL_MAIN
+(
+    inDate  <span style="color: blue;">DATE</span>
+) <span style="color: blue;">IS</span>
+tBatch_ID   PLS_INTEGER := <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>CREATE_BATCH(<span style="color: #a31515;">'CO.GRP.PRD.ETL'</span>);
+<span style="color: blue;">BEGIN</span>
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>SET_RUNTIME_PARAMS(tBatch_ID, <span style="color: #a31515;">'2012-07-31'</span>);
+
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_START(12, 1, <span style="color: #a31515;">'Preloading(cleaning) some crucial slow sources ...'</span>);
+    PRELOAD_CACHE_SECM(tBatch_ID);
+
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color: #808080;">inProgress_Description =&gt;</span>
+        <span style="color: #a31515;">'Loading positions ...'</span>);
+    LOAD_POSITIONS(tBatch_ID);
+
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color: #808080;">inProgress_Description =&gt;</span>
+        <span style="color: #a31515;">'Loading top level securities and classifying product types ...'</span>);
+    LOAD_TOP_LEVEL_SECURITIES(tBatch_ID);
+
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color: #808080;">inProgress_Description =&gt;</span>
+        <span style="color: #a31515;">'Loading middle level securities ...'</span>);
+    LOAD_MID_LEVEL_SECURITIES(tBatch_ID);
+
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color: #808080;">inProgress_Description =&gt;</span>
+        <span style="color: #a31515;">'Loading bottom level securities ...'</span>);
+    LOAD_BTM_LEVEL_SECURITIES(tBatch_ID);
+
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color: #808080;">inProgress_Description =&gt;</span> <span style="color: #a31515;">'Loading issuers ...'</span>);
+    LOAD_ISSUERS(tBatch_ID);
+
+    ...
+
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color: #808080;">inProgress_Description =&gt;</span> <span style="color: #a31515;">'Done.'</span>);
+<span style="color: blue;">END</span> MAIN;</pre>
 </div>
+<p>Then the view VIEW_EXTRACT_BATCH_LOG or VIEW_LAST_BATCH_LOG can be used to mornitor the whole batch progress in background.<br />Or, UI can use the procedure EXTRACT_UTILITY.INSTANCE_TRACE_PROGRESS to display a progress bar.</p>
+<p><strong>Query Optimization</strong></p>
+<p>Avoid/minimize using dynamic SQL and temp tables for extraction, SQL expression errors should be discovered at compile-time. Database view provides a facility for this, the execution plan is prepared when compiling the query, every query can be clearly optimized in advance.</p>
+<p><strong>Data Quality</strong></p>
+<p>The quality of source data always affects queries' performance disastrously. Bad data: missing, duplicate, impossible values ...<br />For instance, - Data missing requires you have to use OUTER JOIN instead of INNER JOIN; - Data duplication requires you to have a extra MIN/MAX...GROUP BY...; ... You are not allowed to use straightforward SQL, but to complicate and slow down queries everywhere painfully! Some romantic requirements even would ask you to split a regular JOIN SQL into several steps and check potential error at every step. Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using SQL.<br />Everyone known in theory, "there is no bad data, but only bad applications". But for some reasons,</p>
 </body>
 </html>

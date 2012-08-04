@@ -17,7 +17,7 @@
 <p><img style="vertical-align: middle;" src="http://www.codeplex.com/Download?ProjectName=view&amp;DownloadId=463345" alt="Figure2" width="689" height="376" /></p>
 <p>Two basic aims of bringing in Interface and Plug-ins:</p>
 <p><span style="text-decoration: underline;">Isolation</span></p>
-<p>To isolate the differences of data model, transform different model from many&nbsp;sources to a common target model, follow by classification, labeling/tagging etc. It helps the code to be loose-coupled while the data keep tightly-coupled. To test each independent view can be much clearer than to test a tangled of sp steps, make the test-driven database development simple.</p>
+<p>To isolate the differences of data model, transform different model from many&nbsp;sources to a common target model, follow by classification, labeling/tagging etc. It helps the code to be loose-coupled while the data keep tightly-coupled. To test each independent view can be much clearer than to test a tangled of steps in sp, make the test-driven database development simple.</p>
 <p><span style="text-decoration: underline;">Unification</span></p>
 <p>&nbsp;A complex system can always be divided into a few clear-cut sub-systems with logical loose coupling integration. For database system design, the principle of division depends on the induction of data model. Then each target sub-system can be treated as one data model, the differences have been transformed into just some attributes in the same model.</p>
 <p><strong>Meta Tables</strong></p>
@@ -27,7 +27,6 @@
 <li>EXTRACT_PLUGIN </li>
 <li>EXTRACT_RULE </li>
 </ol>
-<p>(All the rest tables in the deployment package are some control tables for internal use.)</p>
 <p>1. EXTRACT_INTERFACE</p>
 <div>Sample:</div>
 <table style="border: 1px solid #C0C0C0;" border="1" cellspacing="0" cellpadding="2">
@@ -537,7 +536,7 @@
 <p>In order to pass some parameters to a batch processing of views (like a OOP class with a parameterless constructor only), the session context is introduced in each batch of extraction processing. The package VPI.EXTRACT_UTILITY provides some functions/procedures to operate the session context.</p>
 <ol>
 <li>CREATE_BATCH: The constructor of batch session, this function return a new BATCH_ID. </li>
-<li>SET_RUNTIME_PARAMS: Set properties in a batch session for passing variables cross views. These variables are stored in table EXTRACT_BATCH. </li>
+<li>SET_PARAMS: Set properties in a batch session for passing variables cross views. These variables are stored in table EXTRACT_BATCH. </li>
 </ol>
 <p>For most batch processings, people would like to trace the progress updates during the processing, such as elapsed time, current status, % in progress bar, etc.</p>
 <ol>
@@ -552,7 +551,7 @@
 ) <span style="color: blue;">IS</span>
 tBatch_ID   PLS_INTEGER := <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>CREATE_BATCH(<span style="color: #a31515;">'CO.GRP.PRD.ETL'</span>);
 <span style="color: blue;">BEGIN</span>
-    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>SET_RUNTIME_PARAMS(tBatch_ID, <span style="color: #a31515;">'2012-07-31'</span>);
+    <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>SET_PARAMS(tBatch_ID, <span style="color: #a31515;">'2012-07-31'</span>);
 
     <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_START(12, 1, <span style="color: #a31515;">'Preloading(cleaning) some crucial slow sources ...'</span>);
     PRELOAD_CACHE_SECM(tBatch_ID);
@@ -585,6 +584,11 @@ tBatch_ID   PLS_INTEGER := <span style="color: #c0c0c0;">VPI.</span><span style=
 <p><strong>Query Optimization</strong></p>
 <p>Avoid/minimize using dynamic SQL and temp tables for extraction, SQL expression errors should be discovered at compile-time. Database view provides a facility for this, the execution plan is prepared when compiling the query, every query can be clearly optimized in advance.</p>
 <p><strong>Data Quality</strong></p>
-<p>The quality of source data always affects queries' performance disastrously. Bad data: missing, duplicate, impossible values ...<br />For instance, - Data missing requires you have to use OUTER JOIN instead of INNER JOIN; - Data duplication requires you to have a extra MIN/MAX...GROUP BY...; ... You are not allowed to use straightforward SQL, but to complicate and slow down queries everywhere painfully! Some romantic requirements even would ask you to split a regular JOIN SQL into several steps and check potential error at every step. Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using SQL.<br />Everyone known in theory, "there is no bad data, but only bad applications". But for some reasons,</p>
+<p>The quality of source data always affects queries' performance disastrously. Bad data: missing, duplicate, impossible values ...<br />For instance,<br />- Data missing requires you have to use OUTER JOIN instead of INNER JOIN; <br />- Data duplication requires you to have a extra MIN/MAX...GROUP BY...;<br />...<br />You are not allowed to use straightforward SQL in this situation, but to complicate and slow down queries everywhere painfully! Some romantic business requirements even would ask you to split a regular JOIN SQL into several broken steps and check potential data error at every step, mark error flags, try this side, try that side and continue... Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using Structured Query Language.<br />Everyone known in theory, "there is no bad data, but only bad applications". But in some companies for some reasons, once a new case of data exception was exposed, the requirements always ask downstream applications/reports to handle new error logic, instead of putting constraints in database and fixing upstream applications of data producer to prevent such case happend again. - Isn't it the Emperor's New Clothes,&nbsp;every eyewitness have to draw a new clothes on their own glasses!<br />As a downstream application/report, normally it's also difficult to ask those tables in source systems to add proper indexes for optimizing high frequency queries or bottleneck queries of data consumers.<br />... All thus limitation of fact prompted us to own a isolated clean data environment, we should no longer to drive mine-clearing vehicles on the highway. So a preprocess of source data clean-up becames very helpful for the performance of all follow-up batch extractions. Base on the thinking of view-plug-ins, a Relationship Clean-up Engine will be introduced later, since in most bad data cases, the bad relationship is the most headache of headaches.</p>
+<p><strong>Supported Databases</strong></p>
+<ul>
+<li>Oracle<br />- Currently support. </li>
+<li>SQL Server<br />- In the plan ... </li>
+</ul>
 </body>
 </html>

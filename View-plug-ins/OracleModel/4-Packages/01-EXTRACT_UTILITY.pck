@@ -30,7 +30,7 @@ PROCEDURE SET_CURRENT_BATCH_ID
 );
 
 
-PROCEDURE SET_RUNTIME_PARAMS
+PROCEDURE SET_PARAMS
 (
 	inBatch_ID		PLS_INTEGER	:= CURRENT_BATCH_ID,
 	inVar$Date1		DATE		:= NULL,
@@ -72,7 +72,7 @@ PROCEDURE PROGRESS_UPDATE
 
 -- This procedure will be called by UI to get current progress, it's outside the running session.
 -- So the UI should keep the inBatch_ID locally.
-PROCEDURE INSTANCE_TRACE_PROGRESS
+PROCEDURE POLLING_PROGRESS
 (
 	inBatch_ID				PLS_INTEGER,
 
@@ -124,7 +124,7 @@ BEGIN
 END SET_CURRENT_BATCH_ID;
 
 
-PROCEDURE SET_RUNTIME_PARAMS
+PROCEDURE SET_PARAMS
 (
 	inBatch_ID		PLS_INTEGER	:= CURRENT_BATCH_ID,
 	inVar$Date1		DATE		:= NULL,
@@ -158,7 +158,7 @@ BEGIN
 	WHERE
 		BATCH_ID	= inBatch_ID;
 
-END SET_RUNTIME_PARAMS;
+END SET_PARAMS;
 
 
 FUNCTION GEN_EXTRACT_VIEW
@@ -263,7 +263,7 @@ END PROGRESS_UPDATE;
 
 -- This procedure will be called by UI to get current progress, it's outside the running session.
 -- So the UI should keep the inBatch_ID locally.
-PROCEDURE INSTANCE_TRACE_PROGRESS
+PROCEDURE POLLING_PROGRESS
 (
 	inBatch_ID				PLS_INTEGER,
 
@@ -288,7 +288,7 @@ EXCEPTION
 		outElapsed_Time			:= 0;
 		outCurrent_Step			:= 0;
 		outCurrent_Procedure	:= '';
-END INSTANCE_TRACE_PROGRESS;
+END POLLING_PROGRESS;
 
 
 END EXTRACT_UTILITY;

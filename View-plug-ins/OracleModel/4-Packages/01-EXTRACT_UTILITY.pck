@@ -33,6 +33,7 @@ PROCEDURE SET_CURRENT_BATCH_ID
 PROCEDURE SET_PARAMS
 (
 	inBatch_ID		PLS_INTEGER	:= CURRENT_BATCH_ID,
+
 	inVar$Date1		DATE		:= NULL,
 	inVar$Num1		NUMBER		:= NULL,
 	inVar$Str1		VARCHAR2	:= NULL,
@@ -58,6 +59,7 @@ PROCEDURE PROGRESS_START
 	inTotal_Steps			PLS_INTEGER,
 	inProgress_Step			PLS_INTEGER	:= 1,
 	inProgress_Description	VARCHAR2	:= '',
+
 	inBatch_ID				PLS_INTEGER	:= CURRENT_BATCH_ID
 );
 
@@ -66,6 +68,7 @@ PROCEDURE PROGRESS_UPDATE
 (
 	inProgress_Step			PLS_INTEGER	:= NULL,	-- Move forward one step.
 	inProgress_Description	VARCHAR2	:= '',
+
 	inBatch_ID				PLS_INTEGER	:= CURRENT_BATCH_ID
 );
 
@@ -127,6 +130,7 @@ END SET_CURRENT_BATCH_ID;
 PROCEDURE SET_PARAMS
 (
 	inBatch_ID		PLS_INTEGER	:= CURRENT_BATCH_ID,
+
 	inVar$Date1		DATE		:= NULL,
 	inVar$Num1		NUMBER		:= NULL,
 	inVar$Str1		VARCHAR2	:= NULL,
@@ -214,6 +218,7 @@ PROCEDURE PROGRESS_START
 	inTotal_Steps			PLS_INTEGER,
 	inProgress_Step			PLS_INTEGER	:= 1,
 	inProgress_Description	VARCHAR2	:= '',
+
 	inBatch_ID				PLS_INTEGER	:= CURRENT_BATCH_ID
 )
 IS
@@ -239,6 +244,7 @@ PROCEDURE PROGRESS_UPDATE
 (
 	inProgress_Step			PLS_INTEGER	:= NULL,	-- Move forward one step.
 	inProgress_Description	VARCHAR2	:= '',
+
 	inBatch_ID				PLS_INTEGER	:= CURRENT_BATCH_ID
 )
 IS

@@ -69,10 +69,7 @@
     <Content Include="4-Packages\01-EXTRACT_UTILITY.pck">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="4-Packages\02-VIEW_GEN_EXTRACT_VIEW_CODE.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="4-Packages\03-VIEW_GEN_RULE_VIEW_CODE.sql">
+    <Content Include="4-Packages\02-VIEW_CODE_GENERATION.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="5-Triggers\01-TRG_EXTRACT_RULE.trg">

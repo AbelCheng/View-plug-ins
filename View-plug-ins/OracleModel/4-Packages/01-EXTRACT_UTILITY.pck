@@ -3,8 +3,8 @@ CREATE OR REPLACE PACKAGE VPI.EXTRACT_UTILITY IS
 ----------------------------------------------------------------------------------------------------
 --
 --	Original Author:	Abel Cheng <abelcys@gmail.com>
---	Created Date:		2012-07-21
 --	Primary Host:		http://view.codeplex.com
+--	Created Date:		2012-07-21
 --	Change Log:
 --	Author				Date			Comment
 --

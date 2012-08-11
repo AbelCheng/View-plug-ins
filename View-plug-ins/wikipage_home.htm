@@ -6,7 +6,7 @@
 <body>
 <p><strong>Project Description</strong></p>
 <p>The View-Plug-Ins Programming on database development is an interface-oriented programming. This methodology has been practiced widely in many fields (e.g. OOP programming) for a long time. Here just focus on database development and introduce a few meta-tables and helper packages (for Oracle, or set of stored procedures for SQL Server). The purpose is to simplify the design of many complex batches processing, useful for ETL, reporting and DWH solutions.</p>
-<p>The central motive behind View-Plug-Ins is also a Branches-Leaves model of database development. Branches are stored procedures of flowchart while leaves are views of particular implementation. It helps to remind people <strong>pruning</strong> fruit trees during the growing season (in early stages of software lifecycle, from the system requirement analysis to design stage). Then in&nbsp;later maintenance stage, it would be more clear to organize/see the whole picture from the root to branches if the program structure of SQL scripts like a deciduous tree in winter.</p>
+<p>The central motive behind View-Plug-Ins is also a Branches-Leaves model of database development. Branches are stored procedures of flowchart while leaves are views of particular implementation. It helps to remind people <strong>pruning</strong> fruit trees during the growing season (in early stages of software lifecycle, from the system requirement analysis to design stage). Then in later maintenance stage, it would be more clear to organize/see the whole picture from the root to branches if the program structure of SQL scripts like a deciduous tree in winter.</p>
 <p><strong>Interface Design</strong></p>
 <p>The process of interface designing prefers more converse thinking. Especially in realization phase, the whole programming steps is from Target (output) Model to Source (input) Models, as shown following:<br /><img style="vertical-align: middle;" src="http://www.codeplex.com/Download?ProjectName=view&amp;DownloadId=463344" alt="Figure1" width="545" height="118" /></p>
 <p>Once we get a clear and clean data requirement, then to abstract, induce and simplify into a unified target model is a prerequisite of interface-oriented designing.</p>
@@ -120,8 +120,8 @@
 <td>PROD_CLASS_BSK</td>
 <td>EQUITY BASKET SWAP</td>
 <td>SEC</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>SWAP</td>
+<td>BASKET</td>
 <td>&nbsp;</td>
 </tr>
 <tr>
@@ -271,7 +271,7 @@
 <tr>
 <td>18</td>
 <td>PROD_CLASS_SERE</td>
-<td>EXCHANGE TRADED FUND</td>
+<td>EXCHANGE TRADE FUND</td>
 <td>SEC</td>
 <td>E</td>
 <td>ETF</td>
@@ -316,15 +316,48 @@
 </tbody>
 </table>
 <div><span style="text-decoration: underline;">Columns</span><br />- RULE_ID: The primary key of this table is pointless, it just means one unique rule. The business key should be in one or some of TAG$... columns. The integrity of rules configuration must be checked manually.<br />- PLUGIN_ID: This rule will be applied to which plug-in.<br />- TAG$01: A constant parameter to be used by the extraction plug-in view.<br />- TAG$02: ..<br />- TAG$03: ..<br />- TAG$04: ..<br />- TAG$05: ..<br />- TAG$06: ..<br />- TAG$07: ..<br />- TAG$08: ..<br />- TAG$09: ..<br />- TAG$10: ..<br />- TAG$11: ..<br />- TAG$12: ..<br />- TAG$13: ..<br />- TAG$14: ..<br />- TAG$15: ..<br />- TAG$16: ..<br />&nbsp;</div>
-<p>These TAG$.. columns look a bit ugly for maintenance. From the viewpoint of practical business, all rules under a interface are in the same category. So create a rule-view for each interface specially can solve the ugliness.<br />
-A trigger will create a new declaration of columns alias in EXTRACT_RULE_TAG_ALIAS table while a new interface is being added into EXTRACT_INTERFACE table, assign intelligible alias to corresponding appliable columns. </p>
+<p>These TAG$## columns look a bit ugly in the practice. From the viewpoint of applied business, all rules under a interface are in the same category. So create a rule-view for each interface specially can solve the ugliness.<br />A trigger will create a new declaration of columns alias in EXTRACT_RULE_TAG_ALIAS table while a new interface is being added into EXTRACT_INTERFACE table, please assign intelligible alias to corresponding appliable columns.</p>
+<div>EXTRACT_RULE_TAG_ALIAS Sample:</div>
+<table style="border: 1px solid #C0C0C0;" border="1" cellspacing="0" cellpadding="2">
+<tbody>
+<tr style="font-weight: bold;" align="center" bgcolor="gainsboro">
+<td>INTERFACE_ID</td>
+<td>RULE_VIEW</td>
+<td>TAG$01</td>
+<td>TAG$02</td>
+<td>TAG$03</td>
+<td>TAG$04</td>
+<td>...</td>
+</tr>
+<tr>
+<td>PROD_CLASS</td>
+<td>XYZ.VIEW_CLASS_RULE</td>
+<td>PROD_NAME</td>
+<td>PLATFORM</td>
+<td>CLS_TYPE</td>
+<td>SEC_TYPE</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<div><span style="text-decoration: underline;">Columns</span><br />- INTERFACE_ID: The interface of the rule-view.<br />- RULE_VIEW: The updatable view of EXTRACT_RULE which will assign intelligible alias to appliable TAG$## columns.<br />- TAG$01: Alias of EXTRACT_RULE.TAG$01 column (if appliable).<br />- TAG$02: Alias of EXTRACT_RULE.TAG$02 column (if appliable).<br />- TAG$03: Alias of EXTRACT_RULE.TAG$03 column (if appliable).<br />- TAG$04: Alias of EXTRACT_RULE.TAG$04 column (if appliable).<br />- TAG$05: Alias of EXTRACT_RULE.TAG$05 column (if appliable).<br />- TAG$06: Alias of EXTRACT_RULE.TAG$06 column (if appliable).<br />- TAG$07: Alias of EXTRACT_RULE.TAG$07 column (if appliable).<br />- TAG$08: Alias of EXTRACT_RULE.TAG$08 column (if appliable).<br />- TAG$09: Alias of EXTRACT_RULE.TAG$09 column (if appliable).<br />- TAG$10: Alias of EXTRACT_RULE.TAG$10 column (if appliable).<br />- TAG$11: Alias of EXTRACT_RULE.TAG$11 column (if appliable).<br />- TAG$12: Alias of EXTRACT_RULE.TAG$12 column (if appliable).<br />- TAG$13: Alias of EXTRACT_RULE.TAG$13 column (if appliable).<br />- TAG$14: Alias of EXTRACT_RULE.TAG$14 column (if appliable).<br />- TAG$15: Alias of EXTRACT_RULE.TAG$15 column (if appliable).<br />- TAG$16: Alias of EXTRACT_RULE.TAG$16 column (if appliable).<br />&nbsp;</div>
+<div>Then a rule-view named XYZ.VIEW_CLASS_RULE (above sample) will be generated, it's a updatable view and can be used as a substitute of EXTRACT_RULE table for a specific area (interface).</div>
 <p>Above example is extracting and classifying hundreds of different product type from various source systems.</p>
 <ul>
 <li>The table EXTRACT_RULE induces them into a few extraction models, and centralizes all constant parameters (tags) to minimize hard-code queries. </li>
 <li>Each extraction model expresss as a plug-in view. The table EXTRACT_PLUGIN describes which view presents the realization of each plug-in and which interface need to follow. </li>
-<li>The table EXTRACT_INTERFACE declares the view signature of each interface (like delegate in C#), and the union view which assembles all its plug-in views. The code of union views can be generated by following helper view: </li>
+<li>The table EXTRACT_INTERFACE declares the view signature of each interface (like delegate in C#), and the union view which assembles all its plug-in views. The code of union views and rule views can be generated by following helper view: </li>
 </ul>
-<p style="padding-left: 30px;">SELECT * FROM VPI.VIEW_EXTRACT_GEN_CODE<br /><img src="http://download-codeplex.sec.s-msft.com/Download?ProjectName=view&amp;DownloadId=464809" alt="view_extract_gen_code" width="354" height="42" /><br />Click the &lt;CLOB&gt;..., the generated code will be show in a pop-up window of PL/SQL.</p>
+<p style="padding-left: 30px;">SELECT * FROM VPI.VIEW_CODE_GENERATION<br /><img src="http://download-codeplex.sec.s-msft.com/Download?ProjectName=view&amp;DownloadId=469092" alt="view_code_generation" width="701" height="28" /><br />Click the &lt;CLOB&gt;..., the generated code will be show in a pop-up window of PL/SQL.</p>
 <p><strong>Session Context</strong></p>
 <p>In order to pass some parameters to a batch processing of views (like a OOP class with a parameterless constructor only), the session context is introduced in each batch of extraction processing. The package VPI.EXTRACT_UTILITY provides some functions/procedures to operate the session context.</p>
 <ol>
@@ -377,7 +410,7 @@ tBatch_ID   PLS_INTEGER := <span style="color: #c0c0c0;">VPI.</span><span style=
 <p><strong>Query Optimization</strong></p>
 <p>Avoid/minimize using dynamic SQL and temp tables for extraction, SQL expression errors should be discovered at compile-time. Database view provides a facility for this, the execution plan is prepared when compiling the query, every query can be clearly optimized in advance.</p>
 <p><strong>Data Quality</strong></p>
-<p>The quality of source data always affects queries' performance disastrously.<br />Bad data: missing, duplicate, impossible values ...<br />For instance,<br />- Data missing requires you have to use OUTER JOIN instead of INNER JOIN; <br />- Data duplication requires you to have a extra MIN/MAX...GROUP BY...;<br />...<br />You are not allowed to use straightforward SQL in these situations, but to complicate and slow down queries everywhere painfully! Some romantic business requirements even would ask you to split a regular JOIN SQL into several broken steps and check potential data error at every step, mark error flags, try this side, try that side and continue... Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using Structured Query Language.<br />Everyone known in theory, "there is no bad data, but only bad applications(producers)". But in some companies for some reasons, once a new case of data exception was exposed, the requirements always ask downstream applications/reports to handle new error logic, instead of putting constraints in database and fixing upstream applications of data producer to prevent such case happend again. - Isn't it the Emperor's New Clothes, every eyewitness have to draw a new clothes on their own glasses!<br />As a downstream application/report, normally it's also difficult to ask those tables in source systems to add proper indexes for optimizing high frequency queries or bottleneck queries of data consumers.<br />... All thus limitation of fact prompted us to own a isolated clean data environment, we should no longer to drive mine-clearing vehicles on the highway. So a preprocess of source data clean-up becames very helpful for the performance of all follow-up batch extractions. Base on the thinking of view-plug-ins, a Relationship Clean-up Engine will be introduced shortly, since in most&nbsp;cases of&nbsp;bad data, the bad relationship is the most headache of headaches.</p>
+<p>The quality of source data always affects queries' performance disastrously.<br />Bad data: missing, duplicate, impossible values ...<br />For instance,<br />- Data missing requires you have to use OUTER JOIN instead of INNER JOIN; <br />- Data duplication requires you to have a extra MIN/MAX...GROUP BY...;<br />...<br />You are not allowed to use straightforward SQL in these situations, but to complicate and slow down queries everywhere painfully! Some romantic business requirements even would ask you to split a regular JOIN SQL into several broken steps and check potential data error at every step, mark error flags, try this side, try that side and continue... Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using Structured Query Language.<br />Everyone known in theory, "there is no bad data, but only bad applications(producers)". But in some companies for some reasons, once a new case of data exception was exposed, the requirements always ask downstream applications/reports to handle new error logic, instead of putting constraints in database and fixing upstream applications of data producer to prevent such case happend again. - Isn't it the Emperor's New Clothes, every eyewitness have to draw a new clothes on their own glasses!<br />As a downstream application/report, normally it's also difficult to ask those tables in source systems to add proper indexes for optimizing high frequency queries or bottleneck queries of data consumers.<br />... All thus limitation of fact prompted us to own a isolated clean data environment, we should no longer to drive mine-clearing vehicles on the highway. So a preprocess of source data clean-up becames very helpful for the performance of all follow-up batch extractions. Base on the thinking of view-plug-ins, a Relationship Clean-up Engine will be introduced shortly, since in most cases of bad data, the bad relationship is the most headache of headaches.</p>
 <p><strong>Supported Databases</strong></p>
 <ul>
 <li>Oracle<br />- Currently support. </li>

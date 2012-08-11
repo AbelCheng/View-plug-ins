@@ -5,22 +5,22 @@
 </head>
 <body>
 <p><strong>Project Description</strong></p>
-<p>The View-Plug-Ins Programming on database development is an interface-oriented programming. This methodology has been practiced widely in many fields (e.g. C++, .NET, Java &hellip; programming) for a long time. Here just focus on database development and introduce a few meta-tables and helper packages (for Oracle, or set of stored procedures for SQL Server). The purpose is to simplify the design of many complex batches processing, useful for ETL, reporting and DWH solutions.</p>
-<p>The central idea behind View-Plug-Ins is also a Branches-Leaves model of database development. Branches are stored procedures of flowchart, leaves are views of particular implementation. Like a deciduous tree in winter, it's very clear to organize/see the whole picture from the root to branches.</p>
+<p>The View-Plug-Ins Programming on database development is an interface-oriented programming. This methodology has been practiced widely in many fields (e.g. OOP programming) for a long time. Here just focus on database development and introduce a few meta-tables and helper packages (for Oracle, or set of stored procedures for SQL Server). The purpose is to simplify the design of many complex batches processing, useful for ETL, reporting and DWH solutions.</p>
+<p>The central motive behind View-Plug-Ins is also a Branches-Leaves model of database development. Branches are stored procedures of flowchart while leaves are views of particular implementation. It helps to remind people <strong>pruning</strong> fruit trees during the growing season (in early stages of software lifecycle, from the system requirement analysis to design stage). Then in&nbsp;later maintenance stage, it would be more clear to organize/see the whole picture from the root to branches if the program structure of SQL scripts like a deciduous tree in winter.</p>
 <p><strong>Interface Design</strong></p>
 <p>The process of interface designing prefers more converse thinking. Especially in realization phase, the whole programming steps is from Target (output) Model to Source (input) Models, as shown following:<br /><img style="vertical-align: middle;" src="http://www.codeplex.com/Download?ProjectName=view&amp;DownloadId=463344" alt="Figure1" width="545" height="118" /></p>
 <p>Once we get a clear and clean data requirement, then to abstract, induce and simplify into a unified target model is a prerequisite of interface-oriented designing.</p>
 <ul>
-<li>The Target Model (in above figure) defines the data model; </li>
+<li>The Target Model (above figure) defines the data model; </li>
 <li>A Interface defines a cluster node to approach one kind of required data; </li>
 <li>A view-plug-in defines a method model of data extraction. </li>
 </ul>
 <p><img style="vertical-align: middle;" src="http://www.codeplex.com/Download?ProjectName=view&amp;DownloadId=463345" alt="Figure2" width="689" height="376" /></p>
-<p>Two basic aims of bringing in Interface and Plug-ins:</p>
+<p>Two basic aims of bringing in the Interface and the Plug-ins:</p>
 <p><span style="text-decoration: underline;">Isolation</span></p>
-<p>To isolate the differences of data model, transform different model from many&nbsp;sources to a common target model, follow by classification, labeling/tagging etc. It helps the code to be loose-coupled while the data keep tightly-coupled. To test each independent view can be much clearer than to test a tangled of steps in sp, make the test-driven database development simple.</p>
+<p>To isolate the differences of data model, transform different model from many sources to a common target model, follow by classification, labeling/tagging etc. It helps the code to be loose-coupled while the data keep tightly-coupled. To test each independent view can be much clearer than to test a tangled of steps in sp, make the test-driven database development simple.</p>
 <p><span style="text-decoration: underline;">Unification</span></p>
-<p>&nbsp;A complex system can always be divided into a few clear-cut sub-systems with logical loose coupling integration. For database system design, the principle of division depends on the induction of data model. Then each target sub-system can be treated as one data model, the differences have been transformed into just some attributes in the same model.</p>
+<p>A complex system can always be divided into a few clear-cut sub-systems with logical loose coupling integration. For database system design, the principle of division depends on the induction of data model. Then each target sub-system can be treated as one data model, the differences have been transformed into just some attributes in the same model.</p>
 <p><strong>Meta Tables</strong></p>
 <p>There are only 3 tables about meta data need to be maintained for above designed model:</p>
 <ol>
@@ -42,13 +42,7 @@
 <td>PROD_CLASS</td>
 <td>XYZ.VIEW_EXTRACT_PRODUCTS</td>
 <td>BATCH_ID, SEC_ID, PROD_NAME</td>
-<td>Holding Level SEC_ID with Product Identification</td>
-</tr>
-<tr>
-<td>LEAF_SEC</td>
-<td>XYZ.VIEW_EXTRACT_LEAVES</td>
-<td>BATCH_ID, TRUNK_SEC_ID, LEAF_SEC_ID, LEVEL_, WEIGHT</td>
-<td>Drill down to the bottom level SEC_ID (Self/Underlier/Constituent)</td>
+<td>Holding Level Product Identification</td>
 </tr>
 <tr>
 <td>...</td>
@@ -75,70 +69,28 @@
 <td>PROD_CLASS</td>
 <td>XYZ.VIEW_PROD_CLASS_SERE</td>
 <td>1</td>
-<td>Identify holding products from Seremain (start on holding level).</td>
+<td>Identify products from SerE.</td>
 </tr>
 <tr>
 <td>PROD_CLASS_SECM</td>
 <td>PROD_CLASS</td>
 <td>XYZ.VIEW_PROD_CLASS_SECM</td>
 <td>2</td>
-<td>Identify holding products from SecM (start on holding level).</td>
+<td>Identify products from SecM.</td>
 </tr>
 <tr>
 <td>PROD_CLASS_DEAL</td>
 <td>PROD_CLASS</td>
 <td>XYZ.VIEW_PROD_CLASS_DEAL</td>
 <td>3</td>
-<td>Identify holding products from SecM (start on deal level).</td>
+<td>Identify products from DeaL.</td>
 </tr>
 <tr>
 <td>PROD_CLASS_BSK</td>
 <td>PROD_CLASS</td>
 <td>XYZ.VIEW_PROD_CLASS_BSK</td>
 <td>4</td>
-<td>Identify holding products from Basket User Table</td>
-</tr>
-<tr>
-<td>UND_SEC_1L</td>
-<td>LEAF_SEC</td>
-<td>XYZ.VIEW_UND_SEC_1L</td>
-<td>1</td>
-<td>Single level products - UND_SEC_ID = SEC_ID</td>
-</tr>
-<tr>
-<td>UND_SEC_2L</td>
-<td>LEAF_SEC</td>
-<td>XYZ.VIEW_UND_SEC_2L</td>
-<td>2</td>
-<td>Two levels products, find the underliers from SecM</td>
-</tr>
-<tr>
-<td>UND_SEC_2L3</td>
-<td>LEAF_SEC</td>
-<td>XYZ.VIEW_UND_SEC_2L3</td>
-<td>3</td>
-<td>Two or three levels products, find the underliers, until the bottom level is EQUITY.</td>
-</tr>
-<tr>
-<td>UND_SEC_DLU</td>
-<td>LEAF_SEC</td>
-<td>XYZ.VIEW_UND_SEC_DLU</td>
-<td>4</td>
-<td>Special model DEAL-LEG-UNDERLIER which start from Deal level, end with Underlier level.</td>
-</tr>
-<tr>
-<td>UND_SEC_IND</td>
-<td>LEAF_SEC</td>
-<td>XYZ.VIEW_UND_SEC_IND</td>
-<td>5</td>
-<td>Find all constituents for index products</td>
-</tr>
-<tr>
-<td>UND_SEC_BSK</td>
-<td>LEAF_SEC</td>
-<td>XYZ.VIEW_UND_SEC_BSK</td>
-<td>6</td>
-<td>Find all constituents for basket products</td>
+<td>Identify products from Bsk.</td>
 </tr>
 <tr>
 <td>...</td>
@@ -353,168 +305,6 @@
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td>22</td>
-<td>UND_SEC_1L</td>
-<td>ADR</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>23</td>
-<td>UND_SEC_1L</td>
-<td>COMMON EQUITY</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>24</td>
-<td>UND_SEC_1L</td>
-<td>PREFERRED SHARE</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>25</td>
-<td>UND_SEC_1L</td>
-<td>EXCHANGE TRADED FUND</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>26</td>
-<td>UND_SEC_1L</td>
-<td>GDR</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>27</td>
-<td>UND_SEC_1L</td>
-<td>PREFERRED SHARE</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>28</td>
-<td>UND_SEC_1L</td>
-<td>UNIT</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>29</td>
-<td>UND_SEC_2L</td>
-<td>CONVERTIBLE BOND</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>30</td>
-<td>UND_SEC_2L</td>
-<td>LISTED EQUITY OPTION</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>31</td>
-<td>UND_SEC_2L</td>
-<td>OTC EQUITY OPTION</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>32</td>
-<td>UND_SEC_2L</td>
-<td>RIGHT</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>33</td>
-<td>UND_SEC_2L</td>
-<td>WARRANT</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>34</td>
-<td>UND_SEC_2L3</td>
-<td>SYNTHETIC EQUITY SWAP</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>35</td>
-<td>UND_SEC_BSK</td>
-<td>EQUITY BASKET SWAP</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>36</td>
-<td>UND_SEC_IND</td>
-<td>EQUITY INDEX SWAP</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>37</td>
-<td>UND_SEC_IND</td>
-<td>INDEX FUTURE</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>38</td>
-<td>UND_SEC_IND</td>
-<td>LISTED EQUITY INDEX OPTION</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>39</td>
-<td>UND_SEC_IND</td>
-<td>OTC EQUITY INDEX OPTION</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
 <td>...</td>
 <td>...</td>
 <td>...</td>
@@ -525,7 +315,9 @@
 </tr>
 </tbody>
 </table>
-<div><span style="text-decoration: underline;">Columns</span><br />- RULE_ID: The primary key of this table is pointless, it just means one unique rule. The business key should be in one or some of TAG$... columns. The integrity of rules configuration must be checked manually.<br />- PLUGIN_ID: This rule will be applied to which plug-in.<br />- TAG$01: A constant parameter to be used by the extraction plug-in view.<br />- TAG$02: ..<br />- TAG$03: ..<br />- TAG$04: ..<br />- TAG$05: ..<br />- TAG$06: ..<br />- TAG$07: ..<br />- TAG$08: ..<br />- TAG$09: ..<br />&nbsp;</div>
+<div><span style="text-decoration: underline;">Columns</span><br />- RULE_ID: The primary key of this table is pointless, it just means one unique rule. The business key should be in one or some of TAG$... columns. The integrity of rules configuration must be checked manually.<br />- PLUGIN_ID: This rule will be applied to which plug-in.<br />- TAG$01: A constant parameter to be used by the extraction plug-in view.<br />- TAG$02: ..<br />- TAG$03: ..<br />- TAG$04: ..<br />- TAG$05: ..<br />- TAG$06: ..<br />- TAG$07: ..<br />- TAG$08: ..<br />- TAG$09: ..<br />- TAG$10: ..<br />- TAG$11: ..<br />- TAG$12: ..<br />- TAG$13: ..<br />- TAG$14: ..<br />- TAG$15: ..<br />- TAG$16: ..<br />&nbsp;</div>
+<p>These TAG$.. columns look a bit ugly for maintenance. From the viewpoint of practical business, all rules under a interface are in the same category. So create a rule-view for each interface specially can solve the ugliness.<br />
+A trigger will create a new declaration of columns alias in EXTRACT_RULE_TAG_ALIAS table while a new interface is being added into EXTRACT_INTERFACE table, assign intelligible alias to corresponding appliable columns. </p>
 <p>Above example is extracting and classifying hundreds of different product type from various source systems.</p>
 <ul>
 <li>The table EXTRACT_RULE induces them into a few extraction models, and centralizes all constant parameters (tags) to minimize hard-code queries. </li>
@@ -581,11 +373,11 @@ tBatch_ID   PLS_INTEGER := <span style="color: #c0c0c0;">VPI.</span><span style=
     <span style="color: #c0c0c0;">VPI.</span><span style="color: #808080;">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color: #808080;">inProgress_Description =&gt;</span> <span style="color: #a31515;">'Done.'</span>);
 <span style="color: blue;">END</span> MAIN;</pre>
 </div>
-<p>Then the view VIEW_EXTRACT_BATCH_LOG or VIEW_LAST_BATCH_LOG can be used to mornitor the whole batch progress in background.<br />Or, UI can use the procedure EXTRACT_UTILITY.INSTANCE_TRACE_PROGRESS to display a progress bar.</p>
+<p>Then the view VIEW_EXTRACT_BATCH_LOG or VIEW_LAST_BATCH_LOG can be used to mornitor the whole batch progress in background.<br />Or, UI can use the procedure EXTRACT_UTILITY.POLLING_PROGRESS to display a progress bar.</p>
 <p><strong>Query Optimization</strong></p>
 <p>Avoid/minimize using dynamic SQL and temp tables for extraction, SQL expression errors should be discovered at compile-time. Database view provides a facility for this, the execution plan is prepared when compiling the query, every query can be clearly optimized in advance.</p>
 <p><strong>Data Quality</strong></p>
-<p>The quality of source data always affects queries' performance disastrously. Bad data: missing, duplicate, impossible values ...<br />For instance,<br />- Data missing requires you have to use OUTER JOIN instead of INNER JOIN; <br />- Data duplication requires you to have a extra MIN/MAX...GROUP BY...;<br />...<br />You are not allowed to use straightforward SQL in this situation, but to complicate and slow down queries everywhere painfully! Some romantic business requirements even would ask you to split a regular JOIN SQL into several broken steps and check potential data error at every step, mark error flags, try this side, try that side and continue... Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using Structured Query Language.<br />Everyone known in theory, "there is no bad data, but only bad applications". But in some companies for some reasons, once a new case of data exception was exposed, the requirements always ask downstream applications/reports to handle new error logic, instead of putting constraints in database and fixing upstream applications of data producer to prevent such case happend again. - Isn't it the Emperor's New Clothes,&nbsp;every eyewitness have to draw a new clothes on their own glasses!<br />As a downstream application/report, normally it's also difficult to ask those tables in source systems to add proper indexes for optimizing high frequency queries or bottleneck queries of data consumers.<br />... All thus limitation of fact prompted us to own a isolated clean data environment, we should no longer to drive mine-clearing vehicles on the highway. So a preprocess of source data clean-up becames very helpful for the performance of all follow-up batch extractions. Base on the thinking of view-plug-ins, a Relationship Clean-up Engine will be introduced later, since in most bad data cases, the bad relationship is the most headache of headaches.</p>
+<p>The quality of source data always affects queries' performance disastrously.<br />Bad data: missing, duplicate, impossible values ...<br />For instance,<br />- Data missing requires you have to use OUTER JOIN instead of INNER JOIN; <br />- Data duplication requires you to have a extra MIN/MAX...GROUP BY...;<br />...<br />You are not allowed to use straightforward SQL in these situations, but to complicate and slow down queries everywhere painfully! Some romantic business requirements even would ask you to split a regular JOIN SQL into several broken steps and check potential data error at every step, mark error flags, try this side, try that side and continue... Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using Structured Query Language.<br />Everyone known in theory, "there is no bad data, but only bad applications(producers)". But in some companies for some reasons, once a new case of data exception was exposed, the requirements always ask downstream applications/reports to handle new error logic, instead of putting constraints in database and fixing upstream applications of data producer to prevent such case happend again. - Isn't it the Emperor's New Clothes, every eyewitness have to draw a new clothes on their own glasses!<br />As a downstream application/report, normally it's also difficult to ask those tables in source systems to add proper indexes for optimizing high frequency queries or bottleneck queries of data consumers.<br />... All thus limitation of fact prompted us to own a isolated clean data environment, we should no longer to drive mine-clearing vehicles on the highway. So a preprocess of source data clean-up becames very helpful for the performance of all follow-up batch extractions. Base on the thinking of view-plug-ins, a Relationship Clean-up Engine will be introduced shortly, since in most&nbsp;cases of&nbsp;bad data, the bad relationship is the most headache of headaches.</p>
 <p><strong>Supported Databases</strong></p>
 <ul>
 <li>Oracle<br />- Currently support. </li>

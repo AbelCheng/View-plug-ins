@@ -48,10 +48,16 @@
     <Content Include="1-Tables\07-EXTRACT_BATCH_PROGRESS.sql">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="1-Tables\08-EXTRACT_RULE_TAG_ALIAS.sql">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="2-Views\01-VIEW_EXTRACT_BATCH_LOG.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="2-Views\02-VIEW_LAST_BATCH_LOG.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="2-Views\03-VIEW_EXTRACT_RULE.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="3-Sequences\01-SEQ_RULE_ID.sql">
@@ -63,10 +69,16 @@
     <Content Include="4-Packages\01-EXTRACT_UTILITY.pck">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="4-Packages\02-VIEW_EXTRACT_GEN_CODE.sql">
+    <Content Include="4-Packages\02-VIEW_GEN_EXTRACT_VIEW_CODE.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="4-Packages\03-VIEW_GEN_RULE_VIEW_CODE.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="5-Triggers\01-TRG_EXTRACT_RULE.trg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="5-Triggers\02-TRG_EXTRACT_INTERFACE.trg">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ModelDefinition\OracleModel.uml">

@@ -27,6 +27,9 @@
     <Folder Include="4-Packages\" />
     <Folder Include="5-Triggers\" />
     <Folder Include="ModelDefinition\" />
+    <Content Include="1-Tables\01-PRE_DEPLOY_APP.sql">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="1-Tables\02-EXTRACT_INTERFACE.sql">
       <SubType>Content</SubType>
     </Content>
@@ -49,6 +52,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="1-Tables\09-EXTRACT_RULE_TAG_ALIAS.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="1-Tables\10-PRE_DEPLOY_VERSION.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="2-Views\01-VIEW_EXTRACT_BATCH_LOG.sql">

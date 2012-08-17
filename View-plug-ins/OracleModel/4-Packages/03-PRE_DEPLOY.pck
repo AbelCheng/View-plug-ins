@@ -26,14 +26,16 @@ PROCEDURE BUILD_SERVICE
 
 PROCEDURE PUBLISH_SERVICE
 (
-	inService_ID		VARCHAR2
+	inService_ID	VARCHAR2,
+	inDrop_Old		VARCHAR2	:= 'N'
 );
 
 
 PROCEDURE BUILD_AND_PUBLISH_SERVICE
 (
 	inService_ID	VARCHAR2,
-	inComment		VARCHAR2
+	inComment		VARCHAR2,
+	inDrop_Old		VARCHAR2	:= 'N'
 );
 
 
@@ -149,7 +151,8 @@ END DROP_DEPLOYED_OBJECT;
 
 PROCEDURE PUBLISH_SERVICE
 (
-	inService_ID		VARCHAR2
+	inService_ID		VARCHAR2,
+	inDrop_Old			VARCHAR2	:= 'N'
 )	AS
 	tLatest_Version		PLS_INTEGER;
 	tPrevious_Version	PLS_INTEGER;
@@ -176,7 +179,7 @@ BEGIN
 	END IF;
 
 	IF tObject_Count = 0 THEN
-		DBMS_OUTPUT.PUT_LINE('There is not object for the latest version of the service to deploy!');
+		DBMS_OUTPUT.PUT_LINE('There is no object in the latest version of the service to deploy!');
 		RETURN;
 	END IF;
 
@@ -187,13 +190,13 @@ BEGIN
 		AND	VERSION_		< tLatest_Version
 		AND	SERVICE_ID		= inService_ID;
 
-	IF tPrevious_Version > 0 THEN
+	IF tPrevious_Version > 0 AND UPPER(inDrop_Old) = 'Y' THEN
 		FOR P IN (SELECT OBJECT_NAME, OBJECT_TYPE FROM VPI.PRE_DEPLOY_SCRIPT WHERE DEPLOY_STATUS != 0 AND VERSION_ = tPrevious_Version AND SERVICE_ID = inService_ID ORDER BY DEPLOY_ORDER DESC)
 		LOOP
 			DROP_DEPLOYED_OBJECT(P.OBJECT_NAME, P.OBJECT_TYPE);
 		END LOOP;
 
-		DBMS_OUTPUT.PUT_LINE(UTL_LMS.FORMAT_MESSAGE('-- Objects of previous version(%d) have been dropped --
+		DBMS_OUTPUT.PUT_LINE(UTL_LMS.FORMAT_MESSAGE('--- Objects of previous version(%d) have been dropped ---
 ', tPrevious_Version));
 	END IF;
 
@@ -233,11 +236,12 @@ END PUBLISH_SERVICE;
 PROCEDURE BUILD_AND_PUBLISH_SERVICE
 (
 	inService_ID	VARCHAR2,
-	inComment		VARCHAR2
+	inComment		VARCHAR2,
+	inDrop_Old		VARCHAR2	:= 'N'
 )	AS
 BEGIN
 	BUILD_SERVICE(inService_ID, inComment);
-	PUBLISH_SERVICE(inService_ID);
+	PUBLISH_SERVICE(inService_ID, inDrop_Old);
 END BUILD_AND_PUBLISH_SERVICE;
 
 

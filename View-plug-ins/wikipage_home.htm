@@ -22,24 +22,33 @@
 <p><span style="text-decoration: underline;">Unification</span></p>
 <p>A complex system can always be divided into a few clear-cut sub-systems with logical loose coupling integration. For database system design, the principle of division depends on the induction of data model. Then each target sub-system can be treated as one data model, the differences have been transformed into just some attributes in the same model.</p>
 <p><strong>Meta Tables</strong></p>
-<p>There are only 3 tables about meta data need to be maintained for above designed model:</p>
+<p>There are only&nbsp;4 tables about meta data need to be maintained for above designed model:</p>
 <ol>
-<li>EXTRACT_INTERFACE </li>
+<li>EXTRACT_SERVICE </li>
+<li><strong>EXTRACT_INTERFACE</strong> </li>
 <li>EXTRACT_PLUGIN </li>
 <li>EXTRACT_RULE </li>
 </ol>
-<p>1. EXTRACT_INTERFACE</p>
+<p>1. EXTRACT_SERVICE</p>
+<div>An Extraction Service encapsulates a set of related Interfaces in the form of a service layer:</div>
+<ul>
+<li>In design-time, the Service is used to organize interfaces into application domains (projects). A Service is a management unit to build code generation and for Pre-deployment (see the later section [Pre-deployment] for detail). </li>
+<li>In run-time, all Interfaces under a Service share the same session context for each Batch. </li>
+</ul>
+<p>2. EXTRACT_INTERFACE</p>
 <div>Sample:</div>
 <table style="border: 1px solid #C0C0C0;" border="1" cellspacing="0" cellpadding="2">
 <tbody>
 <tr style="font-weight: bold;" align="center" bgcolor="gainsboro">
 <td>INTERFACE_ID</td>
+<td>SERVICE_ID</td>
 <td>UNION_VIEW</td>
 <td>SELECT_LIST</td>
 <td>DESCRIPTION_</td>
 </tr>
 <tr>
 <td>PROD_CLASS</td>
+<td>APP_DOMAIN</td>
 <td>XYZ.VIEW_EXTRACT_PRODUCTS</td>
 <td>BATCH_ID, SEC_ID, PROD_NAME</td>
 <td>Product Identification</td>
@@ -49,11 +58,12 @@
 <td>...</td>
 <td>...</td>
 <td>...</td>
+<td>...</td>
 </tr>
 </tbody>
 </table>
-<div><span style="text-decoration: underline;">Columns</span><br />- INTERFACE_ID: The unique identifier for the interface, consider a naming convention within the enterprise.<br />- UNION_VIEW: The name of view which will union all plug-ins under the same interface.<br />- SELECT_LIST: The select list in the select statement, every plug-in view of the same interface will follow this signature.<br />- DESCRIPTION_:<br />&nbsp;</div>
-<p>2. EXTRACT_PLUGIN</p>
+<div><span style="text-decoration: underline;">Columns</span><br />- INTERFACE_ID: The unique identifier for the interface, consider a naming convention within the enterprise.<br />- SERVICE_ID: The extract service (application) of this interface.<br />- UNION_VIEW: (Also called Hub-View). The name of view which will union all plug-ins under the same interface.<br />- SELECT_LIST: The select list in the select statement, every plug-in view of the same interface will follow this signature.<br />- DESCRIPTION_:<br />&nbsp;</div>
+<p>3. EXTRACT_PLUGIN</p>
 <div>Sample:</div>
 <table style="border: 1px solid #C0C0C0;" border="1" cellspacing="0" cellpadding="2">
 <tbody>
@@ -102,7 +112,7 @@
 </tbody>
 </table>
 <div><span style="text-decoration: underline;">Columns</span><br />- PLUGIN_ID: The unique identifier for the plug-in, consider a naming convention within the enterprise.<br />- INTERFACE_ID: The interface of the plug-in belongs to.<br />- PLUGIN_VIEW: The view which will implement the plug-in.<br />- PLUGIN_ORDER: The order where the plug-in will be assembled in the interface union view.<br />- DESCRIPTION_:<br />&nbsp;</div>
-<p>3. EXTRACT_RULE</p>
+<p>4. EXTRACT_RULE</p>
 <div>Sample:</div>
 <table style="border: 1px solid #C0C0C0;" border="1" cellspacing="0" cellpadding="2">
 <tbody>
@@ -410,7 +420,15 @@ tBatch_ID   PLS_INTEGER := <span style="color: #c0c0c0;">VPI.</span><span style=
 <p><strong>Query Optimization</strong></p>
 <p>Avoid/minimize using dynamic SQL and temp tables for extraction, SQL expression errors should be discovered at compile-time. Database view provides a facility for this, the execution plan is prepared when compiling the query, every query can be clearly optimized in advance.</p>
 <p><strong>Data Quality</strong></p>
-<p>The quality of source data always affects queries' performance disastrously.<br />Bad data: missing, duplicate, impossible values ...<br />For instance,<br />- Data missing requires you have to use OUTER JOIN instead of INNER JOIN; <br />- Data duplication requires you to have a extra MIN/MAX...GROUP BY...;<br />...<br />You are not allowed to use straightforward SQL in these situations, but to complicate and slow down queries everywhere painfully! Some romantic business requirements even would ask you to split a regular JOIN SQL into several broken steps and check potential data error at every step, mark error flags, try this side, try that side and continue... Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using Structured Query Language.<br />Everyone known in theory, "there is no bad data, but only bad applications(producers)". But in some companies for some reasons, once a new case of data exception was exposed, the requirements always ask downstream applications/reports to handle new error logic, instead of putting constraints in database and fixing upstream applications of data producer to prevent such case happend again. - Isn't it the Emperor's New Clothes, every eyewitness have to draw a new clothes on their own glasses!<br />As a downstream application/report, normally it's also difficult to ask those tables in source systems to add proper indexes for optimizing high frequency queries or bottleneck queries of data consumers.<br />... All thus limitation of fact prompted us to own a isolated clean data environment, we should no longer to drive mine-clearing vehicles on the highway. So a preprocess of source data clean-up becames very helpful for the performance of all follow-up batch extractions. Base on the thinking of view-plug-ins, a Relationship Clean-up Engine will be introduced shortly, since in most cases of bad data, the bad relationship is the most headache of headaches.</p>
+<p>The quality of source data always affects queries' performance disastrously.<br />Bad data: missing, duplicate, impossible values ...<br />For instance,<br />- Data missing requires you have to use OUTER JOIN instead of INNER JOIN; <br />- Data duplication requires you to have a extra MIN/MAX...GROUP BY...;<br />...<br />You are not allowed to use straightforward SQL in these situations, but to complicate and slow down queries everywhere painfully! Some romantic business requirements even would ask you to split a regular JOIN SQL into several broken steps and check potential data error at every step, mark error flags, try this side, try that side and continue... Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br />It is utterly opposed to the principle of using Structured Query Language efficiently.<br />Everyone known in theory, "there is no bad data, but only bad applications(producers)". But in some companies for some reasons, once a new case of data exception was exposed, the requirements always ask downstream applications/reports to handle new error logic, instead of putting constraints in database and fixing upstream applications of data producer to prevent such case happend again. - Isn't it the Emperor's New Clothes, every eyewitness have to draw a new clothes on their own glasses!<br />As a downstream application/report, normally it's also difficult to ask those tables in source systems to add proper indexes for optimizing high frequency queries or bottleneck queries of data consumers.<br />... All thus limitation of fact prompted us to own a isolated clean data environment, we should no longer to drive mine-clearing vehicles on the highway. So a preprocess of source data clean-up becames very helpful for the performance of all follow-up batch extractions. Base on the thinking of view-plug-ins, a Relationship Clean-up Engine will be introduced shortly, since in most cases of bad data, the bad relationship is the most headache of headaches.</p>
+<p><strong>Pre-deployment</strong></p>
+<p>According to above meta-data, all hub-views (union of plug-ins views) and rule-views need to be generated and pre-deployed in early stages of development cycle.</p>
+<p>The package <span style="color: #808080;">VPI.</span>PRE_DEPLOY provides following utilities:</p>
+<ul>
+<li>BUILD_SERVICE<br />Generate source code of all rule-views and hub-views of all interfaces for a service.<br />Each time a service is built, a new version will be associated with the service. Behind the method BUILD_SERVICE, two tables PRE_DEPLOY_VERSION and PRE_DEPLOY_SCRIPT keep track of all historical versions. </li>
+<li>PUBLISH_SERVICE<br />Deploy the latest version which generated by BUILD_SERVICE to the database. The publishing is actually the database engine compiles the generated code. Compilation errors will be recorded in PRE_DEPLOY_SCRIPT table and also be displayed on Output window of PL/SQL.<br />As an option, all old objects (views) deployed by previous version can be dropped before the new deployment. </li>
+<li>BUILD_AND_PUBLISH_SERVICE<br />During the development cycle, BUILD_SERVICE and PUBLISH_SERVICE usually would be run several rounds (once the meta-data has a complete change). For the sake of convenience, BUILD_AND_PUBLISH_SERVICE simply combines BUILD_SERVICE and PUBLISH_SERVICE into one step. </li>
+</ul>
 <p><strong>Supported Databases</strong></p>
 <ul>
 <li>Oracle<br />- Currently support. </li>

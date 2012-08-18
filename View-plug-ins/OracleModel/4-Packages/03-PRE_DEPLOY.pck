@@ -104,6 +104,12 @@ PROCEDURE BUILD_SERVICE
 	tVersion		PLS_INTEGER;
 BEGIN
 	tVersion	:= NEXT_DEPLOY_VERSION(inService_ID);
+
+	IF tVersion IS NULL THEN
+		DBMS_OUTPUT.PUT_LINE('BUILD_SERVICE: Service_ID (' || inService_ID || ') does not exist!');
+		RETURN;
+	END IF;
+
 	INSERT INTO VPI.PRE_DEPLOY_VERSION (SERVICE_ID, VERSION_, COMMENT_, OBJECT_COUNT, DEPLOY_STATUS)
 	VALUES (inService_ID, tVersion, inComment, 0, 0);
 
@@ -162,9 +168,12 @@ PROCEDURE PUBLISH_SERVICE
 	tFailed_Count		PLS_INTEGER	:= 0;
 	tError_Msg			VARCHAR2(512);
 BEGIN
-	SELECT LATEST_VERSION INTO tLatest_Version FROM VPI.EXTRACT_SERVICE WHERE SERVICE_ID = inService_ID;
-	IF tLatest_Version <= 0 THEN
-		DBMS_OUTPUT.PUT_LINE('The service has not been built yet!');
+	SELECT MAX(LATEST_VERSION) INTO tLatest_Version FROM VPI.EXTRACT_SERVICE WHERE SERVICE_ID = inService_ID;
+	IF tLatest_Version IS NULL THEN
+		DBMS_OUTPUT.PUT_LINE('PUBLISH_SERVICE: Service_ID (' || inService_ID || ') does not exist!');
+		RETURN;
+	ELSIF tLatest_Version <= 0 THEN
+		DBMS_OUTPUT.PUT_LINE('PUBLISH_SERVICE: Service_ID (' || inService_ID || ') has not been built yet!');
 		RETURN;
 	END IF;
 

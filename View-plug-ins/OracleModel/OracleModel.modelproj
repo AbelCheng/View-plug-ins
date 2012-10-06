@@ -78,10 +78,19 @@
     <Content Include="4-Packages\01-EXTRACT_UTILITY.pck">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="4-Packages\02-VIEW_CODE_GENERATION.sql">
+    <Content Include="4-Packages\04-DEPLOY_UTILITY.pck">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="4-Packages\02-VIEW_EXTRACT_CODE.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="4-Packages\03-PRE_DEPLOY.pck">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="4-Packages\05-EXTRACT_DEPLOY.pck">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="4-Packages\06-VIEW_EXTRACT_METADATA.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="5-Triggers\01-TRG_EXTRACT_RULE.trg">

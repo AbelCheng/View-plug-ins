@@ -1,0 +1,413 @@
+<div class="wikidoc">
+<p><strong>Project Description</strong></p>
+<p>The View-Plug-Ins Programming on database development is an interface-oriented programming. This methodology has been practiced widely in many fields (e.g. OOP programming) for a long time. Here just focus on database development and introduce a few meta-tables
+ and helper packages (for Oracle, or set of stored procedures for SQL Server). The purpose is to simplify the design of many complex batches processing, useful for ETL, reporting and DWH solutions.</p>
+<p>The central motive behind View-Plug-Ins is also a Branches-Leaves model of database development. Branches are stored procedures of flowchart while leaves are views of particular implementation. It helps to remind people
+<strong>pruning</strong> fruit trees during the growing season (in early stages of software lifecycle, from the system requirement analysis to design stage). Then in later maintenance stage, it would be more clear to organize/see the whole picture from the
+ root to branches if the program structure of SQL scripts like a deciduous tree in winter.</p>
+<p><strong>Interface Design</strong></p>
+<p>The process of interface designing prefers more converse thinking. Especially in realization phase, the whole programming steps is from Target (output) Model to Source (input) Models, as shown following:<br>
+<img src="/Download?ProjectName=view&DownloadId=463344" alt="Figure1" width="545" height="118" style="vertical-align:middle"></p>
+<p>Once we get a clear and clean data requirement, then to abstract, induce and simplify into a unified target model is a prerequisite of interface-oriented designing.</p>
+<ul>
+<li>The Target Model (above figure) defines the data model; </li><li>A Interface defines a cluster node to approach one kind of required data; </li><li>A view-plug-in defines a method model of data extraction. </li></ul>
+<p><img src="/Download?ProjectName=view&DownloadId=463345" alt="Figure2" width="689" height="376" style="vertical-align:middle"></p>
+<p>Two basic aims of bringing in the Interface and the Plug-ins:</p>
+<p><span style="text-decoration:underline">Isolation</span></p>
+<p>To isolate the differences of data model, transform different model from many sources to a common target model, follow by classification, labeling/tagging etc. It helps the code to be loose-coupled while the data keep tightly-coupled. To test each independent
+ view can be much clearer than to test a tangled of steps in sp, make the test-driven database development simple.</p>
+<p><span style="text-decoration:underline">Unification</span></p>
+<p>A complex system can always be divided into a few clear-cut sub-systems with logical loose coupling integration. For database system design, the principle of division depends on the induction of data model. Then each target sub-system can be treated as one
+ data model, the differences have been transformed into just some attributes in the same model.</p>
+<p><strong>Meta Tables</strong></p>
+<p>There are only 4 tables about meta data need to be maintained for above designed model:</p>
+<ol>
+<li>EXTRACT_SERVICE </li><li><strong>EXTRACT_INTERFACE</strong> </li><li>EXTRACT_PLUGIN </li><li>EXTRACT_RULE </li></ol>
+<div><img src="/Download?ProjectName=view&DownloadId=471665" alt="db_diagram" width="646" height="450"></div>
+<p>1. EXTRACT_SERVICE</p>
+<div>An Extraction Service encapsulates a set of related Interfaces in the form of a service layer:</div>
+<ul>
+<li>In design-time, the Service is used to organize interfaces into application domains (projects). A Service is a management unit to build code generation and for Pre-deployment (see the later section [Pre-deployment] for detail).
+</li><li>In run-time, all Interfaces under a Service share the same session context for each Batch.
+</li></ul>
+<p>2. EXTRACT_INTERFACE</p>
+<div>Sample:</div>
+<table border="1" cellspacing="0" cellpadding="2" style="border:1px solid #C0C0C0">
+<tbody>
+<tr align="center" bgcolor="gainsboro" style="font-weight:bold">
+<td>INTERFACE_ID</td>
+<td>SERVICE_ID</td>
+<td>UNION_VIEW</td>
+<td>SELECT_LIST</td>
+<td>DESCRIPTION_</td>
+</tr>
+<tr>
+<td>PRD_CLS</td>
+<td>APP_DOMAIN</td>
+<td>XYZ.VIEW_ALL_PROD</td>
+<td>BATCH_ID, SEC_ID, PROD_NAME</td>
+<td>Prod Identification</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<div><span style="text-decoration:underline">Columns</span><br>
+- INTERFACE_ID: The unique identifier for the interface, consider a naming convention within the enterprise.<br>
+- SERVICE_ID: The extract service (application) of this interface.<br>
+- UNION_VIEW: (Also called Hub-View). The name of view which will union all plug-ins under the same interface.<br>
+- SELECT_LIST: The select list in the select statement, every plug-in view of the same interface will follow this signature.<br>
+- DESCRIPTION_:<br>
+&nbsp;</div>
+<p>3. EXTRACT_PLUGIN</p>
+<div>Sample:</div>
+<table border="1" cellspacing="0" cellpadding="2" style="border:1px solid #C0C0C0">
+<tbody>
+<tr align="center" bgcolor="gainsboro" style="font-weight:bold">
+<td>PLUGIN_ID</td>
+<td>INTERFACE_ID</td>
+<td>PLUGIN_VIEW</td>
+<td>PLUGIN_ORDER</td>
+<td>DESCRIPTION_</td>
+</tr>
+<tr>
+<td>PRD_CLS_SRM</td>
+<td>PRD_CLS</td>
+<td>XYZ.VIEW_PROD_CLS_SRM</td>
+<td>1</td>
+<td>Identify prods from Srm</td>
+</tr>
+<tr>
+<td>PRD_CLS_SCM</td>
+<td>PRD_CLS</td>
+<td>XYZ.VIEW_PROD_CLS_SCM</td>
+<td>2</td>
+<td>Identify prods from Scm</td>
+</tr>
+<tr>
+<td>PRD_CLS_DEA</td>
+<td>PRD_CLS</td>
+<td>XYZ.VIEW_PROD_CLS_DEA</td>
+<td>3</td>
+<td>Identify prods from Dea</td>
+</tr>
+<tr>
+<td>PRD_CLS_BSK</td>
+<td>PRD_CLS</td>
+<td>XYZ.VIEW_PROD_CLS_BSK</td>
+<td>4</td>
+<td>Identify prods from Bsk</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<div><span style="text-decoration:underline">Columns</span><br>
+- PLUGIN_ID: The unique identifier for the plug-in, consider a naming convention within the enterprise.<br>
+- INTERFACE_ID: The interface of the plug-in belongs to.<br>
+- PLUGIN_VIEW: The view which will implement the plug-in.<br>
+- PLUGIN_ORDER: The order where the plug-in will be assembled in the interface union view.<br>
+- DESCRIPTION_:<br>
+&nbsp;</div>
+<p>4. EXTRACT_RULE</p>
+<div>Sample:</div>
+<table border="1" cellspacing="0" cellpadding="2" style="border:1px solid #C0C0C0">
+<tbody>
+<tr align="center" bgcolor="gainsboro" style="font-weight:bold">
+<td>RULE_ID</td>
+<td>PLUGIN_ID</td>
+<td>TAG$01</td>
+<td>TAG$02</td>
+<td>TAG$03</td>
+<td>TAG$04</td>
+<td>...</td>
+</tr>
+<tr>
+<td>1</td>
+<td>PRD_CLS_BSK</td>
+<td>PC</td>
+<td>Flat Code A</td>
+<td>SWAP</td>
+<td>BASKET</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>2</td>
+<td>PRD_CLS_SCM</td>
+<td>PC</td>
+<td>Flat Code B</td>
+<td>LST_OPT</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>3</td>
+<td>PRD_CLS_SCM</td>
+<td>PC</td>
+<td>Flat Code C</td>
+<td>OTC_OPT</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>4</td>
+<td>PRD_CLS_SCM</td>
+<td>PC</td>
+<td>Flat Code D</td>
+<td>FUTURE</td>
+<td>DEBT</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>5</td>
+<td>PRD_CLS_DEA</td>
+<td>PC</td>
+<td>Flat Code E</td>
+<td>SWAP</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>6</td>
+<td>PRD_CLS_DEA</td>
+<td>PC</td>
+<td>Flat Code F</td>
+<td>FORWARD</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>7</td>
+<td>PRD_CLS_DEA</td>
+<td>PC</td>
+<td>Flat Code G</td>
+<td>FUTURE</td>
+<td>INDEX</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>8</td>
+<td>PRD_CLS_SRM</td>
+<td>PC</td>
+<td>Flat Code H</td>
+<td>E</td>
+<td>ADR</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>9</td>
+<td>PRD_CLS_SRM</td>
+<td>PC</td>
+<td>Flat Code I</td>
+<td>E</td>
+<td>COM</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>10</td>
+<td>PRD_CLS_SRM</td>
+<td>PC</td>
+<td>Flat Code J</td>
+<td>E</td>
+<td>GDR</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<div><span style="text-decoration:underline">Columns</span><br>
+- RULE_ID: The primary key of this table is pointless, it just means one unique rule. The business key should be in one or some of TAG$... columns. The integrity of rules configuration must be checked manually.<br>
+- PLUGIN_ID: This rule will be applied to which plug-in.<br>
+- TAG$01: A constant parameter to be used by the extraction plug-in view.<br>
+- TAG$02: ..<br>
+- TAG$03: ..<br>
+- TAG$04: ..<br>
+- TAG$05: ..<br>
+- TAG$06: ..<br>
+- TAG$07: ..<br>
+- TAG$08: ..<br>
+- TAG$09: ..<br>
+- TAG$10: ..<br>
+- TAG$11: ..<br>
+- TAG$12: ..<br>
+- TAG$13: ..<br>
+- TAG$14: ..<br>
+- TAG$15: ..<br>
+- TAG$16: ..<br>
+&nbsp;</div>
+<p>These TAG$## columns look a bit ugly in the practice. From the viewpoint of applied business, all rules under a interface are in the same category. So create a rule-view for each interface specially can solve the ugliness.<br>
+A trigger will create a new declaration of columns alias in EXTRACT_RULE_TAG_ALIAS table while a new interface is being added into EXTRACT_INTERFACE table, please assign intelligible alias to corresponding appliable columns.</p>
+<div>EXTRACT_RULE_TAG_ALIAS Sample:</div>
+<table border="1" cellspacing="0" cellpadding="2" style="border:1px solid #C0C0C0">
+<tbody>
+<tr align="center" bgcolor="gainsboro" style="font-weight:bold">
+<td>INTERFACE_ID</td>
+<td>RULE_VIEW</td>
+<td>TAG$01</td>
+<td>TAG$02</td>
+<td>TAG$03</td>
+<td>TAG$04</td>
+<td>...</td>
+</tr>
+<tr>
+<td>PRD_CLS</td>
+<td>XYZ.VIEW_CLASS_RULE</td>
+<td>PROD_NAME</td>
+<td>PLATFORM</td>
+<td>CLS_TYPE</td>
+<td>SEC_TYPE</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<div><span style="text-decoration:underline">Columns</span><br>
+- INTERFACE_ID: The interface of the rule-view.<br>
+- RULE_VIEW: The updatable view of EXTRACT_RULE which will assign intelligible alias to appliable TAG$## columns.<br>
+- TAG$01: Alias of EXTRACT_RULE.TAG$01 column (if appliable).<br>
+- TAG$02: Alias of EXTRACT_RULE.TAG$02 column (if appliable).<br>
+- TAG$03: Alias of EXTRACT_RULE.TAG$03 column (if appliable).<br>
+- TAG$04: Alias of EXTRACT_RULE.TAG$04 column (if appliable).<br>
+- TAG$05: Alias of EXTRACT_RULE.TAG$05 column (if appliable).<br>
+- TAG$06: Alias of EXTRACT_RULE.TAG$06 column (if appliable).<br>
+- TAG$07: Alias of EXTRACT_RULE.TAG$07 column (if appliable).<br>
+- TAG$08: Alias of EXTRACT_RULE.TAG$08 column (if appliable).<br>
+- TAG$09: Alias of EXTRACT_RULE.TAG$09 column (if appliable).<br>
+- TAG$10: Alias of EXTRACT_RULE.TAG$10 column (if appliable).<br>
+- TAG$11: Alias of EXTRACT_RULE.TAG$11 column (if appliable).<br>
+- TAG$12: Alias of EXTRACT_RULE.TAG$12 column (if appliable).<br>
+- TAG$13: Alias of EXTRACT_RULE.TAG$13 column (if appliable).<br>
+- TAG$14: Alias of EXTRACT_RULE.TAG$14 column (if appliable).<br>
+- TAG$15: Alias of EXTRACT_RULE.TAG$15 column (if appliable).<br>
+- TAG$16: Alias of EXTRACT_RULE.TAG$16 column (if appliable).<br>
+&nbsp;</div>
+<p>Then a rule-view named XYZ.VIEW_CLASS_RULE (above sample) will be generated, it's a updatable view and can be used as a substitute of EXTRACT_RULE table for a specific area (interface).</p>
+<p>Above example is extracting and classifying hundreds of different product type from various source systems.</p>
+<ul>
+<li>The table EXTRACT_RULE induces them into a few extraction models, and centralizes all constant parameters (tags) to minimize hard-code queries.
+</li><li>Each extraction model expresss as a plug-in view. The table EXTRACT_PLUGIN describes which view presents the realization of each plug-in and which interface need to follow.
+</li><li>The table EXTRACT_INTERFACE declares the view signature of each interface (like delegate in C#), and the union view which assembles all its plug-in views. The code of union views and rule views can be generated by following helper view:
+</li></ul>
+<div style="padding-left:20px">SELECT * FROM <span style="color:#808080">VPI.</span>VIEW_EXTRACT_CODE</div>
+<div><img src="/Download?ProjectName=view&DownloadId=471646" alt="view_code_generation" width="689" height="29"></div>
+<div style="padding-left:20px">Click the &lt;CLOB&gt;..., the generated code will be show in a pop-up window of PL/SQL.<br>
+&nbsp;</div>
+<p><strong>Session Context</strong></p>
+<p>In order to pass some parameters to a batch processing of views (like a OOP class with a parameterless constructor only), the session context is introduced in each batch of extraction processing. The package VPI.EXTRACT_UTILITY provides some functions/procedures
+ to operate the session context.</p>
+<ol>
+<li>CREATE_BATCH: The constructor of batch session, this function return a new BATCH_ID.
+</li><li>SET_PARAMS: Set properties in a batch session for passing variables cross views. These variables are stored in table EXTRACT_BATCH.
+</li></ol>
+<p>For most batch processings, people would like to trace the progress updates during the processing, such as elapsed time, current status, % in progress bar, etc.</p>
+<ol>
+<li>PROGRESS_START: This procedure initializes how many steps will the batch process.
+</li><li>PROGRESS_UPDATE: This procedure updates current status. </li></ol>
+<div>For example (Oracle version):</div>
+<div style="color:black; background-color:white">
+<pre><span style="color:blue">PROCEDURE</span> ETL_MAIN
+(
+    inDate  <span style="color:blue">DATE</span>
+) <span style="color:blue">IS</span>
+tBatch_ID   PLS_INTEGER := <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>CREATE_BATCH(<span style="color:#a31515">'CO.GRP.PRD.ETL'</span>);
+<span style="color:blue">BEGIN</span>
+    <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>SET_PARAMS(tBatch_ID, <span style="color:#a31515">'2012-07-31'</span>);
+
+    <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>PROGRESS_START(12, 1, <span style="color:#a31515">'Preloading(cleaning) some crucial slow sources ...'</span>);
+    PRELOAD_CACHE_SCM(tBatch_ID);
+
+    <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color:#808080">inProgress_Description =&gt;</span>
+        <span style="color:#a31515">'Loading positions ...'</span>);
+    LOAD_POSITIONS(tBatch_ID);
+
+    <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color:#808080">inProgress_Description =&gt;</span>
+        <span style="color:#a31515">'Loading top level securities and classifying product types ...'</span>);
+    LOAD_TOP_LEVEL_SECURITIES(tBatch_ID);
+
+    <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color:#808080">inProgress_Description =&gt;</span>
+        <span style="color:#a31515">'Loading middle level securities ...'</span>);
+    LOAD_MID_LEVEL_SECURITIES(tBatch_ID);
+
+    <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color:#808080">inProgress_Description =&gt;</span>
+        <span style="color:#a31515">'Loading bottom level securities ...'</span>);
+    LOAD_BTM_LEVEL_SECURITIES(tBatch_ID);
+
+    <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color:#808080">inProgress_Description =&gt;</span> <span style="color:#a31515">'Loading issuers ...'</span>);
+    LOAD_ISSUERS(tBatch_ID);
+
+    ...
+
+    <span style="color:#c0c0c0">VPI.</span><span style="color:#808080">EXTRACT_UTILITY.</span>PROGRESS_UPDATE(<span style="color:#808080">inProgress_Description =&gt;</span> <span style="color:#a31515">'Done.'</span>);
+<span style="color:blue">END</span> MAIN;</pre>
+</div>
+<p>Then the view VIEW_EXTRACT_BATCH_LOG or VIEW_LAST_BATCH_LOG can be used to mornitor the whole batch progress in background.<br>
+Or, UI can use the procedure EXTRACT_UTILITY.POLLING_PROGRESS to display a progress bar.</p>
+<p><strong>Query Optimization</strong></p>
+<p>Avoid/minimize using dynamic SQL and temp tables for extraction, SQL expression errors should be discovered at compile-time. Database view provides a facility for this, the execution plan is prepared when compiling the query, every query can be clearly optimized
+ in advance.</p>
+<p><strong>Data Quality</strong></p>
+<p>The quality of source data always affects queries' performance disastrously.<br>
+Bad data: missing, duplicate, impossible values ...<br>
+For instance,<br>
+- Data missing requires you have to use OUTER JOIN instead of INNER JOIN; <br>
+- Data duplication requires you to have a extra MIN/MAX...GROUP BY...;<br>
+...<br>
+You are not allowed to use straightforward SQL in these situations, but to complicate and slow down queries everywhere painfully! Some romantic business requirements even would ask you to split a regular JOIN SQL into several broken steps and check potential
+ data error at every step, mark error flags, try this side, try that side and continue... Imagine there are some land mines were laid along the highway, then every vehicles are required to be mine-clearing vehicles!<br>
+It is utterly opposed to the principle of using Structured Query Language efficiently.<br>
+Everyone known in theory, &quot;there is no bad data, but only bad applications(producers)&quot;. But in some companies for some reasons, once a new case of data exception was exposed, the requirements always ask downstream applications/reports to handle new error logic,
+ instead of putting constraints in database and fixing upstream applications of data producer to prevent such case happend again. - Isn't it the Emperor's New Clothes, every eyewitness have to draw a new clothes on their own glasses!<br>
+As a downstream application/report, normally it's also difficult to ask those tables in source systems to add proper indexes for optimizing high frequency queries or bottleneck queries of data consumers.<br>
+... All thus limitation of fact prompted us to own a isolated clean data environment, we should no longer to drive mine-clearing vehicles on the highway. So a preprocess of source data clean-up becames very helpful for the performance of all follow-up batch
+ extractions. Base on the thinking of view-plug-ins, a Relationship Clean-up Engine has been introduced in
+<a href="http://datawashroom.codeplex.com/" target="_self">http://datawashroom.codeplex.com/</a>, since in most cases of bad data, the bad relationship is the most headache of headaches.</p>
+<p><strong>Pre-deployment</strong></p>
+<p>According to above metadata, all hub-views (union of plug-ins views) and rule-views need to be generated and pre-deployed in early stages of development cycle.</p>
+<p>The package <span style="color:#808080">VPI.</span>PRE_DEPLOY provides following utilities:</p>
+<ul>
+<li>BUILD_SERVICE<br>
+Generate source code of all rule-views and hub-views of all interfaces for a service.<br>
+Each time a service is built, a new version will be associated with the service. Behind the method BUILD_SERVICE, two tables PRE_DEPLOY_VERSION and PRE_DEPLOY_SCRIPT keep track of all historical versions.
+</li><li>PUBLISH_SERVICE<br>
+Deploy the latest version which generated by BUILD_SERVICE to the database. The publishing is actually the database engine compiles the generated code. Compilation errors will be recorded in PRE_DEPLOY_SCRIPT table and also be displayed on DBMS Output window
+ of PL/SQL.<br>
+As an option, all old objects (views) deployed by previous version can be dropped before the new deployment.
+</li><li>BUILD_AND_PUBLISH_SERVICE<br>
+During the development cycle, BUILD_SERVICE and PUBLISH_SERVICE usually would be run several rounds (once the metadata has a complete change). For the sake of convenience, BUILD_AND_PUBLISH_SERVICE simply combines BUILD_SERVICE and PUBLISH_SERVICE into one
+ step. </li></ul>
+<p><strong>Metadata Deployment</strong></p>
+<p>In essence, the production deployment is to deploy metadata. Please see also the [<span style="color:#000080">Build and Deploy</span>] section in
+<a href="http://datawashroom.codeplex.com/" target="_blank">http://datawashroom.codeplex.com/</a> for detail deployment mechanism.</p>
+<p>The view <span style="color:#008080">VIEW_EXTRACT_METADATA</span> presents the Metadata Manifest for each service.</p>
+<p><strong>Supported Databases</strong></p>
+<ul>
+<li>Oracle<br>
+- Currently support. </li><li>SQL Server<br>
+- In the plan ... </li></ul>
+</div><div class="ClearBoth"></div>
